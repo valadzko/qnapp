@@ -3,7 +3,5 @@ FactoryGirl.define do
 
     body "xxxxxxxxxxxxxxxxxxxxxxxxxxxx"
     title "MyString"
-
   end
-
 end
