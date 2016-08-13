@@ -1,0 +1,7 @@
+= form_for(@question) do |f|
+  p 
+    = f.text_field :title, placeholder: "New title"
+  p 
+    = f.text_field :body, placeholder: "Question body goes here"
+  p 
+    = f.submit

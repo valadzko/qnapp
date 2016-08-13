@@ -1,0 +1,4 @@
+- @questions.each do |q|
+  ul
+    li = link_to "#{q.title}", question_path(id: q)
+p = link_to "New", new_question_path
