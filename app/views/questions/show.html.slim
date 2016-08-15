@@ -1,5 +1,13 @@
-h2 Datailed view for question
+h2 Detailed view for question
 = @question.title
 p 
 = @question.body
+hr 
+hr
+- @question.answers.each_with_index do |answer, index|
+  = "Answer #{index}"
+  br
+  = "#{answer.body}"
+  hr
+
 p = link_to "All questions", questions_path
