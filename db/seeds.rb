@@ -50,6 +50,7 @@ The 10-Year Old Rule. Pretend you had to teach everything in your course to a te
 Seek Your Professors. A great tip from Tim Ferriss in the 4-Hour Workweek involves what to do if you get a bad mark on a paper. He recommends meeting your professor during office hours and asking for suggestions for improvement. Tim recommends that you exhaust every possible question, staying for an hour or two if you have to. By doing this you will not only have a wealth of information about how papers are marked, but your professor will also hesitate to give you a lousy mark in the future.
 Schedule a Balance. Compress your work and studying into the weekdays and mornings so you don’t need to work all of the time. Good habits also involve taking time for rest as well.")
 
-q2 = Question.new( title: "What can I do for 10 minutes every day that will change my life?", body: "Although meditation is a nice answer, please refrain from adding it if there is nothing new and interesting describing it as this has already been added multiple times.")
+q2 = Question.create( title: "What can I do for 10 minutes every day that will change my life?", body: "Although meditation is a nice answer, please refrain from adding it if there is nothing new and interesting describing it as this has already been added multiple times.")
 
-q3 = Question.new( title: "What are some ways to keep yourself from getting distracted while working or studying?", body: "I find myself drifting on to random websites or taking phone calls when I should be working.")
+
+q3 = Question.create( title: "What are some ways to keep yourself from getting distracted while working or studying?", body: "I find myself drifting on to random websites or taking phone calls when I should be working.")

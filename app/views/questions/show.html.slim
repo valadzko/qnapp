@@ -2,12 +2,18 @@ h2 Detailed view for question
 = @question.title
 p 
 = @question.body
-hr 
-hr
-- @question.answers.each_with_index do |answer, index|
-  = "Answer #{index + 1}"
-  br
-  = "#{answer.body}"
+
+- if @question.answers.any?
+  hr 
   hr
+  - @question.answers.each_with_index do |answer, index|
+    = "Answer #{index + 1}"
+    br
+    = "#{answer.body}"
+    hr
+- else 
+  br 
+  h3 No answers so far, post the first answer:
+
 p = link_to "Add new answer", new_question_answer_path(@question)
 p = link_to "All questions", questions_path
