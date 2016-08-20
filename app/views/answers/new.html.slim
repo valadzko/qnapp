@@ -1,5 +1,10 @@
 = form_for([@question, @answer]) do |f|
+  h1 Question: 
+  = @question.title
   p 
-    = f.text_field :body, placeholder: "Question body goes here"
+  = @question.body
+  h1 Your answer:
   p 
-    = f.submit
+    = f.text_area(:body, cols: 100, rows: 10)
+  p 
+    = f.submit "Post Your Answer"

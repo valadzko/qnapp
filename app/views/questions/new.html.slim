@@ -1,7 +1,9 @@
 = form_for(@question) do |f|
-  p 
+  h1  Title:
+  p
     = f.text_field :title, placeholder: "New title"
+  h1 Text:
   p 
-    = f.text_field :body, placeholder: "Question body goes here"
+    = f.text_area(:body, cols: 100, rows: 10)
   p 
-    = f.submit
+    = f.submit "Post Your Question"
