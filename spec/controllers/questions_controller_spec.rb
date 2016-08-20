@@ -30,7 +30,6 @@ RSpec.describe QuestionsController, type: :controller do
     describe 'POST #create' do
       context 'with valid attributes' do
         it 'saves new question in database 'do
-          question
           expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
         end
 
@@ -42,7 +41,6 @@ RSpec.describe QuestionsController, type: :controller do
 
       context 'with invalid attributes' do
         it 'does not save the question' do
-          question
           expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
         end
 
