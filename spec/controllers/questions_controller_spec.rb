@@ -29,7 +29,7 @@ RSpec.describe QuestionsController, type: :controller do
 
     describe 'POST #create' do
       context 'with valid attributes' do
-        it 'saves new question in database 'do
+        it 'saves new question in database ' do
           expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
         end
 
@@ -78,14 +78,13 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'PATCH #update' do
     context 'with valid attributes' do
-
       it 'assings the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question)
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, id: question, question: {title: 'new title', body: 'my new long valid body'}
+        patch :update, id: question, question: { title: 'new title', body: 'my new long valid body' }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'my new long valid body'
@@ -95,12 +94,11 @@ RSpec.describe QuestionsController, type: :controller do
         patch :update, id: question, question: attributes_for(:question)
         expect(response).to redirect_to :question
       end
-
     end
 
-    #TODO add case for body length gt 15
+    # TODO add case for body length gt 15
     context 'with invalid attributes' do
-      before { patch :update, id: question, question: {title: 'new title', body: nil} }
+      before { patch :update, id: question, question: { title: 'new title', body: nil } }
 
       it 'does not change question attributes' do
         question.reload
@@ -114,11 +112,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-
   describe 'DELETE #destroy' do
     it 'deletes question' do
       question
-      expect {delete :destroy, id: question}.to change(Question, :count).by(-1)
+      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
     end
 
     it 'redirects to index view' do
@@ -126,5 +123,4 @@ RSpec.describe QuestionsController, type: :controller do
       expect(response).to redirect_to questions_path
     end
   end
-
 end
