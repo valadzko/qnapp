@@ -4,7 +4,8 @@
   p 
   = @question.body
   h1 Your answer:
-  p 
+  p
+    = f.label 'Body'
     = f.text_area(:body, cols: 100, rows: 10)
   p 
     = f.submit "Post Your Answer"
