@@ -11,7 +11,7 @@ feature 'Create Answer on question', %q{
     sign_in(user)
     visit question_path(question)
     click_on 'Add new answer'
-    fill_in 'Body', with: 'The answer text which is worth to type'
+    fill_in 'answer_body', with: 'The answer text which is worth to type'
     click_on 'Post Your Answer'
     expect(page).to have_content question.title
     expect(page).to have_content question.body
@@ -19,6 +19,6 @@ feature 'Create Answer on question', %q{
   end
 
   scenario 'Non-authenticated user can not create answer on the question'do
-
+    
   end
 end

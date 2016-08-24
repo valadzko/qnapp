@@ -8,6 +8,8 @@ feature 'User sign in', %q{
 
   given(:user) { create(:user) }
   scenario 'Registered user tries to sign in' do
+    visit questions_path
+    expect(page).to have_selector(:link_or_button, 'Sign in')
     sign_in(user)
 
     expect(page).to have_content 'Signed in successfully'

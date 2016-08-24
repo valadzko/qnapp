@@ -12,8 +12,8 @@ feature 'Create question', %q{
 
     visit questions_path
     click_on 'Ask question'
-    fill_in 'Title', with: 'Test question title'
-    fill_in 'Body', with: 'Question test body'
+    fill_in 'question_title', with: 'Test question title'
+    fill_in 'question_body', with: 'Question test body'
     click_on 'Post Your Question'
     expect(page).to have_content 'Question test body'
   end
