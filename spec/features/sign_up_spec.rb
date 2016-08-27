@@ -22,20 +22,18 @@ feature 'User sign up', %q{
     click_on 'Sign up'
     fill_in 'user_email', with: 'my-test-email@gmail.com'
     fill_in 'user_password', with: '12345678'
-    fill_in 'user_password_confirmation', with: '12345678'.reverse
+    fill_in 'user_password_confirmation', with: 'password-does-not-match'
     click_on 'Sign up'
     expect(page).to have_content "Password confirmation doesn't match"
   end
 
   scenario 'Unregistered user tries to sign up, but email is already used' do
-    User.create(email: 'my-test-email@gmail.com', password: "12345678", password_confirmation: "12345678")
     visit questions_path
     click_on 'Sign up'
-    fill_in 'user_email', with: 'my-test-email@gmail.com'
+    fill_in 'user_email', with: create(:user).email # to have already used email
     fill_in 'user_password', with: '11111111'
     fill_in 'user_password_confirmation', with: '11111111'
     click_on 'Sign up'
-
     expect(page).to have_content "Email has already been taken"
   end
 

@@ -102,15 +102,18 @@ RSpec.describe QuestionsController, type: :controller do
 
     # TODO add case for body length gt 15
     context 'with invalid attributes' do
-      before { patch :update, id: question, question: { title: 'new title', body: nil } }
 
       it 'does not change question attributes' do
+        title_before_try = question.title
+        body_before_try = question.body
+        patch :update, id: question, question: { title: 'new title', body: nil }
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        expect(question.title).to eq title_before_try
+        expect(question.body).to eq body_before_try
       end
 
       it 're-renders edit view' do
+        patch :update, id: question, question: { title: 'new title', body: nil }
         expect(response).to render_template :edit
       end
     end

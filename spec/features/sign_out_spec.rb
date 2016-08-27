@@ -6,9 +6,8 @@ feature 'User can sign out', %q{
   I want to sign out
 } do
 
-  given(:user) { create(:user) }
   scenario 'Signed-in tries to sign out' do
-    sign_in(user)
+    sign_in create(:user)
     visit questions_path
     expect(page).to have_selector(:link_or_button, 'Sign out')
     expect(page).to_not have_selector(:link_or_button, 'Sign in')

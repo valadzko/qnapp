@@ -6,22 +6,18 @@ feature 'View question and answers', %q{
   I want to be able to see the question details view with answers
 } do
 
+  given(:question) {create(:question)}
   scenario 'Any user can see detailed question view with answers' do
-    @q = Question.create(title: 'Tricky question about substracting numbers', body: 'How many times can you subtract 10 from 100?')
-    @q.answers.create(body: 'Once. Next time you would be subtracting 10 from 90.')
-
-    visit question_path(@q)
-    expect(page).to have_content 'Tricky question about substracting numbers'
-    expect(page).to have_content 'How many times can you subtract 10 from 100?'
-    expect(page).to have_content 'Once. Next time you would be subtracting 10 from 90.'
+    answer = create(:answer, question: question)
+    visit question_path(question)
+    expect_page_to_have_question(question)
+    expect(page).to have_content answer.body
   end
 
   scenario 'Any user can see details question view with no answers' do
-    @q = Question.create(title: 'Tricky question about substracting numbers', body: 'How many times can you subtract 10 from 100?')
-
-    visit question_path(@q)
-    expect(page).to have_content 'Tricky question about substracting numbers'
-    expect(page).to have_content 'How many times can you subtract 10 from 100?'
+    visit question_path(question)
+    expect_page_to_have_question(question)
     expect(page).to have_content 'No answers'
   end
+
 end

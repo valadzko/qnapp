@@ -9,4 +9,9 @@ module FeatureHelper
   def sign_out
     visit destroy_user_session_path
   end
+
+  def expect_page_to_have_question(question)
+    expect(page).to have_content question.title
+    expect(page).to have_content question.body
+  end
 end
