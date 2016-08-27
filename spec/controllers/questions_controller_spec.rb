@@ -136,11 +136,10 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     context 'not an author of the question tries delete question' do
+      sign_in_user
       it 'should redirect to questions' do
-        author = create(:user)
-        sign_in(author)
-        question = create(:question, user: author)
-        sign_out(author)
+        question = create(:question, user: @user)
+        sign_out(@user)
         answerer = create(:user)
         sign_in(answerer)
         delete :destroy, id: question
