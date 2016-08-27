@@ -1,6 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :must_be_author!, only: [:delete]
+
   def index
     @questions = Question.all
   end
@@ -39,6 +41,10 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def must_be_author!
+    redirect_to questions_path if !current_user.author_of?(@question)
+  end
 
   def find_question
     @question = Question.find(params[:id])

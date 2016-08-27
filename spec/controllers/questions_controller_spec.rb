@@ -120,15 +120,32 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    sign_in_user
-    it 'deletes question' do
-      question
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    context 'with valid attributes (user is author of the question)' do
+        before do
+          author = create(:user)
+          sign_in(author)
+          @question = create(:question, user: author)
+        end
+        it 'delete question' do
+          expect{delete :destroy, id: @question}.to change(Question, :count).by(-1)
+        end
+        it 'redirects to questions view' do
+          delete :destroy, id: @question
+          expect(response).to redirect_to questions_path
+        end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'not an author of the question tries delete question' do
+      it 'should redirect to questions' do
+        author = create(:user)
+        sign_in(author)
+        question = create(:question, user: author)
+        sign_out(author)
+        answerer = create(:user)
+        sign_in(answerer)
+        delete :destroy, id: question
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end

@@ -43,4 +43,41 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
+
+  describe 'DELETE #destroy' do
+    context 'with valid attributes (author of answer)' do
+      it 'should delete the answer' do
+        author = create(:user)
+        sign_in(author)
+        question = create(:question, user: author)
+        answer = create(:answer, question: question, user: author)
+        expect{delete :destroy, id: answer, question_id: question}.to change(Answer, :count).by(-1)
+      end
+
+      it 'should re-render question path' do
+        author = create(:user)
+        sign_in(author)
+        question = create(:question, user: author)
+        answer = create(:answer, question: question, user: author)
+        delete :destroy, id: answer, question_id: question
+        expect(response).to redirect_to question
+      end
+    end
+
+    context 'with invalid attributes (not an author of the question)' do
+      it 'should re-render question path' do
+        author = create(:user)
+        sign_in(author)
+        question = create(:question, user: author)
+        answer = create(:answer, question: question, user: author)
+        sign_out(author)
+        not_an_answerer = create(:user)
+        sign_in(not_an_answerer)
+        delete :destroy, id: answer, question_id: question
+        expect(response).to redirect_to question
+      end
+    end
+  end
+
+
 end

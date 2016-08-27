@@ -2,14 +2,19 @@ h2 Detailed view for question
 = @question.title
 p 
 = @question.body
+- if user_signed_in? && current_user.author_of?(@question)
+  p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
 
-- if @question.answers.any?
-  hr 
+- if @question.answers.any? 
   hr
   - @question.answers.each_with_index do |answer, index|
-    = "Answer #{index + 1}"
+    = "Answer #{index + 1}"    
     br
     = "#{answer.body}"
+    - if user_signed_in? && current_user.author_of?(answer)
+      p = link_to 'Delete answer', question_answer_path(@question, answer),
+        method: :delete,
+        data: { confirm: 'This will delete you answer. Are you sure?' }
     hr
 - else 
   br 
