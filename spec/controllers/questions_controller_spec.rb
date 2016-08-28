@@ -39,9 +39,9 @@ RSpec.describe QuestionsController, type: :controller do
           expect(response).to redirect_to question_path(assigns(:question))
         end
 
-        it 'associates question with current_user' do
-          # post :create, question: attributes_for(:question)
-          # expect
+        it 'associates new answer with current user' do
+          post :create, question: attributes_for(:question)
+          expect(assigns(:question).user).to eq subject.current_user
         end
       end
 

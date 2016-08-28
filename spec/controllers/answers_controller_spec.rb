@@ -30,6 +30,11 @@ RSpec.describe AnswersController, type: :controller do
         post :create, answer: attributes_for(:answer), question_id: question
         expect(response).to redirect_to question
       end
+
+      it 'associates new answer with current user' do
+        post :create, answer: attributes_for(:answer), question_id: question
+        expect(assigns(:answer).user).to eq subject.current_user
+      end
     end
 
     context 'with invalid attributes' do

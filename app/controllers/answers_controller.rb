@@ -5,7 +5,7 @@ class AnswersController < ApplicationController
   before_action :must_be_author!, only: [:destroy]
 
   def new
-    @answer = @question.answers.new(user: current_user)
+    @answer = @question.answers.new
   end
 
   def create
@@ -26,7 +26,10 @@ class AnswersController < ApplicationController
   private
 
   def must_be_author!
-    redirect_to @question if !current_user.author_of?(@answer)
+    if !current_user.author_of?(@answer)
+      redirect_to @question
+      flash[:error] = "You can delete only your answer"
+    end
   end
 
   def answer_params

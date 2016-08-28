@@ -6,28 +6,29 @@ RSpec.describe User do
   it { should have_many :answers }
   it { should have_many :questions }
 
+  let(:user){ create(:user) }
+  let(:question) {create(:question, user: user) }
   context 'Validate authority of question' do
     it 'from user who created question (is author)' do
-      # user = create(:user)
-      # sign_in(user)
-      # question = create(:question, user: @user)
-      # expect(@user.author_of?(question)).to be true
+      expect(user.author_of?(question)).to be true
     end
 
     it 'from user who did not create question (is not author)' do
-      # user = create(:user)
-      # sign_in(user)
-      # question = create(:question, user: user)
-      # user2 = create(:user)
-      # expect(user2.author_of?(question)).to be false
+      not_author = create(:user)
+      expect(not_author.author_of?(question)).to be false
     end
   end
 
-  # it "validates authority of user who created question" do
-  #
-  # end
-  #
-  # it 'validates authority of user who did not create question' do
-  #
-  # end
+  context 'Validate authority of answer' do
+    let(:answer){ create(:answer, user: user) }
+
+    it 'from user who created answer (is author)' do
+      expect(user.author_of?(answer)).to be true
+    end
+
+    it 'from user who did not create answer (is not author)' do
+      not_author = create(:user)
+      expect(not_author.author_of?(answer)).to be false
+    end
+  end
 end
