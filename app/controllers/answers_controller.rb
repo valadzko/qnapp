@@ -20,13 +20,13 @@ class AnswersController < ApplicationController
 
   def destroy
     @answer.destroy
-    redirect_to question_path(@question)
+    redirect_to @question
   end
 
   private
 
   def must_be_author!
-    redirect_to question_path(@question) if !current_user.author_of?(@answer)
+    redirect_to @question if !current_user.author_of?(@answer)
   end
 
   def answer_params

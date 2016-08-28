@@ -38,6 +38,11 @@ RSpec.describe QuestionsController, type: :controller do
           post :create, question: attributes_for(:question)
           expect(response).to redirect_to question_path(assigns(:question))
         end
+
+        it 'associates question with current_user' do
+          # post :create, question: attributes_for(:question)
+          # expect
+        end
       end
 
       context 'with invalid attributes' do
@@ -120,7 +125,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    context 'with valid attributes (user is author of the question)' do
+    context 'author of question' do
         before do
           author = create(:user)
           sign_in(author)
@@ -137,12 +142,17 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'not an author of the question tries delete question' do
       sign_in_user
-      it 'should redirect to questions' do
-        question = create(:question, user: @user)
+      before do
+        @question = create(:question, user: @user)
         sign_out(@user)
-        answerer = create(:user)
-        sign_in(answerer)
-        delete :destroy, id: question
+        sign_in(create(:user))
+      end
+
+      it 'does not delete question' do
+        expect{ delete :destroy, id: @question }.to_not change(Question, :count)
+      end
+      it 'should redirect to questions' do
+        delete :destroy, id: @question
         expect(response).to redirect_to questions_path
       end
     end

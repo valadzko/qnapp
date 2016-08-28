@@ -1,7 +1,7 @@
 h1 All questions
 - @questions.each do |q|
   ul
-    li = link_to "#{q.title}", question_path(id: q)
+    li = link_to q.title, q
 p = link_to "Ask question", new_question_path
 - if user_signed_in? 
   p = link_to "Sign out", destroy_user_session_path(@user)

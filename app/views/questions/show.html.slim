@@ -12,7 +12,7 @@ p
     br
     = "#{answer.body}"
     - if user_signed_in? && current_user.author_of?(answer)
-      p = link_to 'Delete answer', question_answer_path(@question, answer),
+      p = link_to 'Delete answer', [@question, answer],
         method: :delete,
         data: { confirm: 'This will delete you answer. Are you sure?' }
     hr

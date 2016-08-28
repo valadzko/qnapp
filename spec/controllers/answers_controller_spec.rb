@@ -51,22 +51,28 @@ RSpec.describe AnswersController, type: :controller do
       @answer = create(:answer, question: @question, user: @user)
     end
 
-    context 'with valid attributes (author of answer)' do
-      it 'should delete the answer' do
+    context 'author of answer' do
+      it 'deletes the answer' do
         expect{delete :destroy, id: @answer, question_id: @question}.to change(Answer, :count).by(-1)
       end
 
-      it 'should re-render question path' do
+      it 'redirect to question path' do
         delete :destroy, id: @answer, question_id: @question
         expect(response).to redirect_to @question
       end
     end
 
-    context 'with invalid attributes (not an author of the question)' do
-      it 'should re-render question path' do
+    context 'not an author of question' do
+      before do
         sign_out(@user)
-        not_an_answerer = create(:user)
-        sign_in(not_an_answerer)
+        sign_in(create(:user))
+      end
+
+      it 'does not delete answer' do
+        expect{ delete :destroy, id: @answer, question_id: @question }.to_not change(Answer, :count)
+      end
+
+      it 'redirect to question path' do
         delete :destroy, id: @answer, question_id: @question
         expect(response).to redirect_to @question
       end

@@ -7,6 +7,6 @@ class User < ApplicationRecord
   has_many :answers
 
   def author_of?(obj)
-    return obj.user_id == id
+    obj.user_id == id
   end
 end

@@ -4,4 +4,5 @@ class Question < ApplicationRecord
 
   validates :title, :body, presence: true
   validates :body, length: { minimum: 15 }
+  validates :user_id, presence: true
 end
