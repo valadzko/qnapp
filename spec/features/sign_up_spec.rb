@@ -8,7 +8,6 @@ feature 'User sign up', %q{
 
   scenario 'Unregistered user tries to sign up and succeed' do
     visit questions_path
-    expect(page).to have_selector(:link_or_button, 'Sign up')
     click_on 'Sign up'
     fill_in 'user_email', with: 'my-test-email@gmail.com'
     fill_in 'user_password', with: '12345678'

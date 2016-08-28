@@ -19,7 +19,6 @@ feature 'Create Answer on question', %q{
   scenario 'Non-authenticated user can not create answer on the question'do
     visit question_path(question)
     click_on 'Add new answer'
-
     expect(page).to have_content 'You need to sign in or sign up before continuing.'
   end
 end

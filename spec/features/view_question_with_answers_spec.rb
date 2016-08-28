@@ -7,11 +7,12 @@ feature 'View question and answers', %q{
 } do
 
   given(:question) {create(:question)}
-  scenario 'Any user can see detailed question view with answers' do
-    answer = create(:answer, question: question)
+  scenario 'Any user can see detailed question view with list of answers' do
+    answer1, answer2 = create_list(:answer, 2, question: question)
     visit question_path(question)
     expect_page_to_have_question(question)
-    expect(page).to have_content answer.body
+    expect(page).to have_content answer1.body
+    expect(page).to have_content answer2.body
   end
 
   scenario 'Any user can see details question view with no answers' do
