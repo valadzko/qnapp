@@ -9,7 +9,6 @@ feature 'Create Answer on question', %q{
   scenario 'Authenticated user can create answer for the question' do
     sign_in create(:user)
     visit question_path(question)
-    click_on 'Add new answer'
     fill_in 'answer_body', with: 'The answer text which is worth to type'
     click_on 'Post Your Answer'
     expect_page_to_have_question(question)
@@ -18,7 +17,6 @@ feature 'Create Answer on question', %q{
 
   scenario 'Non-authenticated user can not create answer on the question'do
     visit question_path(question)
-    click_on 'Add new answer'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    expect(page).to_not have_link 'Post Your Answer'
   end
 end

@@ -4,8 +4,14 @@ p
 = @question.body
 - if user_signed_in? && current_user.author_of?(@question)
   p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
-
-- if @question.answers.any? 
+- if user_signed_in?
+  h1 Add your answer:
+  p = form_for [@question, @question.answers.create] do |f|
+    = f.label 'Body'
+    = f.text_area(:body, cols: 80, rows: 7)
+    p
+    = f.submit "Post Your Answer"
+- if @question.answers.count > 0 
   hr
   - @question.answers.each_with_index do |answer, index|
     = "Answer #{index + 1}"    
@@ -18,7 +24,7 @@ p
     hr
 - else 
   br 
-  h3 No answers so far, post the first answer:
+  h3 No answers so far, post the first answer.
 
 p = link_to "Add new answer", new_question_answer_path(@question)
 p = link_to "All questions", questions_path
