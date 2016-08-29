@@ -10,7 +10,8 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question
     else
-      render 'questions/show', :flash => { :error => "Your answer is not valid" }
+      render 'questions/show'
+      flash[:error] = 'Your answer was not updated'
     end
   end
 
