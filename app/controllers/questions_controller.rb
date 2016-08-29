@@ -43,9 +43,8 @@ class QuestionsController < ApplicationController
   private
 
   def must_be_author!
-    if !current_user.author_of?(@question)
-      redirect_to questions_path
-      flash[:error] = "You can delete only your question"
+    unless current_user.author_of?(@question)
+      redirect_to questions_path, :flash => { :error => "You can delete only your question" }
     end
   end
 

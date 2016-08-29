@@ -7,8 +7,11 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.new(answer_params)
     @answer.user = current_user
-    @answer.save
-    redirect_to @question
+    if @answer.save
+      redirect_to @question
+    else
+      render 'questions/show', :flash => { :error => "Your answer is not valid" }
+    end
   end
 
   def destroy
@@ -19,9 +22,8 @@ class AnswersController < ApplicationController
   private
 
   def must_be_author!
-    if !current_user.author_of?(@answer)
-      redirect_to @question
-      flash[:error] = "You can delete only your answer"
+    unless current_user.author_of?(@answer)
+      redirect_to @question, :flash => { :error => "You can delete only your answer" }
     end
   end
 

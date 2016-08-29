@@ -31,7 +31,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'redirect to question path' do
         post :create, answer: attributes_for(:invalid_answer), question_id: question
-        expect(response).to redirect_to question
+        expect(response).to render_template("questions/show")
       end
     end
   end

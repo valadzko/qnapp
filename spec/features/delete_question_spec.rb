@@ -25,4 +25,10 @@ feature 'Delete question', %q{
     visit question_path(@question)
     expect(page).to_not have_link 'Delete question'
   end
+
+  scenario 'Non-authenticated user can not see the Delete question link' do
+    sign_out
+    visit question_path(@question)
+    expect(page).to_not have_link 'Delete question'
+  end
 end
