@@ -24,7 +24,7 @@ class AnswersController < ApplicationController
 
   def must_be_author!
     unless current_user.author_of?(@answer)
-      redirect_to @question, :flash => { :error => "You can delete only your answer" }
+      redirect_to @question, error: "You can delete only your answer"
     end
   end
 
