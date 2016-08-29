@@ -11,6 +11,8 @@ p
     = f.text_area(:body, cols: 80, rows: 7)
     p
     = f.submit "Post Your Answer"
+- else
+  h4 You need to login to answer the question
 - if @question.answers.count > 0
   hr
   - @question.answers.each_with_index do |answer, index|
@@ -26,6 +28,5 @@ p
   br
   h3 No answers so far, post the first answer.
 
-p = link_to "Add new answer", new_question_answer_path(@question)
 p = link_to "All questions", questions_path
 = render "layouts/sign"
