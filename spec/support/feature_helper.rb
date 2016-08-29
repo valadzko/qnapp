@@ -7,7 +7,8 @@ module FeatureHelper
   end
 
   def sign_out
-    visit destroy_user_session_path
+    visit root_path
+    click_on 'Sign out'
   end
 
   def expect_page_to_have_question(question)
