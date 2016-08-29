@@ -28,6 +28,7 @@ RSpec.describe QuestionsController, type: :controller do
     end
 
     describe 'POST #create' do
+      sign_in_user
       context 'with valid attributes' do
         it 'saves new question in database ' do
           expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
@@ -36,6 +37,11 @@ RSpec.describe QuestionsController, type: :controller do
         it 'redirects to show view' do
           post :create, question: attributes_for(:question)
           expect(response).to redirect_to question_path(assigns(:question))
+        end
+
+        it 'associates new answer with current user' do
+          post :create, question: attributes_for(:question)
+          expect(assigns(:question).user).to eq subject.current_user
         end
       end
 
@@ -53,6 +59,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #new' do
+    sign_in_user
     before { get :new }
 
     it 'assign a new question to @question' do
@@ -65,6 +72,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #edit' do
+    sign_in_user
     before { get :edit, id: question }
 
     it 'assign the requested question to @question' do
@@ -77,6 +85,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    sign_in_user
     context 'with valid attributes' do
       it 'assings the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question)
@@ -98,29 +107,54 @@ RSpec.describe QuestionsController, type: :controller do
 
     # TODO add case for body length gt 15
     context 'with invalid attributes' do
-      before { patch :update, id: question, question: { title: 'new title', body: nil } }
 
       it 'does not change question attributes' do
+        title_before_try = question.title
+        body_before_try = question.body
+        patch :update, id: question, question: { title: 'new title', body: nil }
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'xxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+        expect(question.title).to eq title_before_try
+        expect(question.body).to eq body_before_try
       end
 
       it 're-renders edit view' do
+        patch :update, id: question, question: { title: 'new title', body: nil }
         expect(response).to render_template :edit
       end
     end
   end
 
   describe 'DELETE #destroy' do
-    it 'deletes question' do
-      question
-      expect { delete :destroy, id: question }.to change(Question, :count).by(-1)
+    context 'author of question' do
+        before do
+          author = create(:user)
+          sign_in(author)
+          @question = create(:question, user: author)
+        end
+        it 'delete question' do
+          expect{delete :destroy, id: @question}.to change(Question, :count).by(-1)
+        end
+        it 'redirects to questions view' do
+          delete :destroy, id: @question
+          expect(response).to redirect_to questions_path
+        end
     end
 
-    it 'redirects to index view' do
-      delete :destroy, id: question
-      expect(response).to redirect_to questions_path
+    context 'not an author of the question tries delete question' do
+      sign_in_user
+      before do
+        @question = create(:question, user: @user)
+        sign_out(@user)
+        sign_in(create(:user))
+      end
+
+      it 'does not delete question' do
+        expect{ delete :destroy, id: @question }.to_not change(Question, :count)
+      end
+      it 'should redirect to questions' do
+        delete :destroy, id: @question
+        expect(response).to redirect_to questions_path
+      end
     end
   end
 end

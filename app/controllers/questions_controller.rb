@@ -1,5 +1,8 @@
 class QuestionsController < ApplicationController
+  before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :must_be_author!, only: [:destroy]
+
   def index
     @questions = Question.all
   end
@@ -16,7 +19,7 @@ class QuestionsController < ApplicationController
 
   def create
     @question = Question.new(question_params)
-
+    @question.user = current_user
     if @question.save
       redirect_to @question
     else
@@ -38,6 +41,12 @@ class QuestionsController < ApplicationController
   end
 
   private
+
+  def must_be_author!
+    unless current_user.author_of?(@question)
+      redirect_to questions_path, error: "You can delete only your question"
+    end
+  end
 
   def find_question
     @question = Question.find(params[:id])
