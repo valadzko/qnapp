@@ -9,29 +9,29 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'with valid attributes' do
       it 'saves new answer to database' do
-        expect { post :create, answer: attributes_for(:answer), question_id: question }.to change(Answer, :count).by(1)
-        expect { post :create, answer: attributes_for(:answer), question_id: question }.to change { question.answers.count }.by(1)
+        expect { post :create, answer: attributes_for(:answer), question_id: question, format: :js }.to change(Answer, :count).by(1)
+        expect { post :create, answer: attributes_for(:answer), question_id: question, format: :js }.to change { question.answers.count }.by(1)
       end
 
-      it 'redirect to question view' do
-        post :create, answer: attributes_for(:answer), question_id: question
-        expect(response).to redirect_to question
+      it 'render create template' do
+        post :create, answer: attributes_for(:answer), question_id: question, format: :js
+        expect(response).to render_template :create
       end
 
       it 'associates new answer with current user' do
-        post :create, answer: attributes_for(:answer), question_id: question
+        post :create, answer: attributes_for(:answer), question_id: question, format: :js
         expect(assigns(:answer).user).to eq subject.current_user
       end
     end
 
     context 'with invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, answer: attributes_for(:invalid_answer), question_id: question }.to_not change(Answer, :count)
+        expect { post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
       it 'redirect to question path' do
-        post :create, answer: attributes_for(:invalid_answer), question_id: question
-        expect(response).to render_template("questions/show")
+        post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
+        expect(response).to render_template :create
       end
     end
   end
@@ -70,6 +70,4 @@ RSpec.describe AnswersController, type: :controller do
       end
     end
   end
-
-
 end

@@ -1,0 +1,14 @@
+- if @question.answers.count > 0
+  hr
+  - @question.answers.each_with_index do |answer, index|
+    = "Answer #{index + 1}"
+    br
+    = "#{answer.body}"
+    - if user_signed_in? && current_user.author_of?(answer)
+      p = link_to 'Delete answer', [@question, answer],
+        method: :delete,
+        data: { confirm: 'This will delete you answer. Are you sure?' }
+    hr
+- else
+  br
+  h3 No answers so far

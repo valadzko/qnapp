@@ -1,18 +1,11 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create]
-  before_action :find_question, only: [:new, :create, :destroy]
+  before_action :authenticate_user!, only: [:create, :destroy]
+  before_action :find_question, only: [:create, :destroy]
   before_action :find_answer, only: [:destroy]
   before_action :must_be_author!, only: [:destroy]
 
   def create
-    @answer = @question.answers.new(answer_params)
-    @answer.user = current_user
-    if @answer.save
-      redirect_to @question
-    else
-      render 'questions/show'
-      flash[:error] = 'Your answer was not updated'
-    end
+    @answer = @question.answers.create(answer_params.merge(user: current_user))
   end
 
   def destroy
