@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User sign up', %q{
   In order to be able to use features that requires authentication

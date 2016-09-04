@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User can sign out', %q{
   In order to use the site on public computers

@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'Create Answer on question', %q{
   In order to share my brilliant knowledge and experience
