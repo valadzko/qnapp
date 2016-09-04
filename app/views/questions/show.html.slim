@@ -9,9 +9,9 @@ p
   = render 'answers'
 
 - if user_signed_in?
-  h1 Add your answer:
   p = form_for [@question, @question.answers.create], remote: true do |f|
-    = f.label 'Body'
+    = f.label 'Add your answer'
+    .answer-errors
     = f.text_area(:body, cols: 80, rows: 7)
     p
     = f.submit "Post Your Answer"
