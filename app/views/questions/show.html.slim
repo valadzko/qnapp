@@ -4,29 +4,19 @@ p
 = @question.body
 - if user_signed_in? && current_user.author_of?(@question)
   p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
+
+.answers
+  = render 'answers'
+
 - if user_signed_in?
   h1 Add your answer:
-  p = form_for [@question, @question.answers.create] do |f|
+  p = form_for [@question, @question.answers.create], remote: true do |f|
     = f.label 'Body'
     = f.text_area(:body, cols: 80, rows: 7)
     p
     = f.submit "Post Your Answer"
 - else
   h4 You need to login to answer the question
-- if @question.answers.count > 0
-  hr
-  - @question.answers.each_with_index do |answer, index|
-    = "Answer #{index + 1}"
-    br
-    = "#{answer.body}"
-    - if user_signed_in? && current_user.author_of?(answer)
-      p = link_to 'Delete answer', [@question, answer],
-        method: :delete,
-        data: { confirm: 'This will delete you answer. Are you sure?' }
-    hr
-- else
-  br
-  h3 No answers so far, post the first answer.
 
 p = link_to "All questions", questions_path
 = render "layouts/sign"

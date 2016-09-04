@@ -1,0 +1,6 @@
+if ($('#answer_body').val().length == 0) {
+  alert("You can not post empty answer!")
+}else{
+  $('.answers').append('<%= j render @answer %>');
+  $('#answer_body').val('');
+}

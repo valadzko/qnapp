@@ -6,13 +6,24 @@ feature 'Create Answer on question', %q{
   I want to be able to create answer on the question
 }do
   given(:question) { create(:question) }
-  scenario 'Authenticated user can create answer for the question' do
+  scenario 'Authenticated user can create answer for the question', js: true do
     sign_in create(:user)
     visit question_path(question)
     fill_in 'answer_body', with: 'The answer text which is worth to type'
     click_on 'Post Your Answer'
     expect_page_to_have_question(question)
-    expect(page).to have_content 'The answer text which is worth to type'
+    within '.answers' do
+      expect(page).to have_content 'The answer text which is worth to type'
+    end
+  end
+
+  scenario 'Authenticated user submit empty answer for the question', js: true do
+    sign_in create(:user)
+    visit question_path(question)
+    fill_in 'answer_body', with: '' # just to make sure it is empty
+    click_on 'Post Your Answer'
+    expect_page_to_have_question(question)
+    expect(question.answers.count).to eq 0
   end
 
   scenario 'Non-authenticated user can not create answer on the question'do

@@ -1,0 +1,6 @@
+- unless @question.answers.empty?
+  hr
+  = render @question.answers
+- else
+  br
+  h3 No answers so far
