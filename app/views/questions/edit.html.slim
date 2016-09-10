@@ -1,5 +1,8 @@
 h2 Edit question
-= form_for(@link) do |f|
-  = f.text_field :title
-  = f.text_field :body
+= form_for(@question) do |f|
+  = f.label :title
+  = f.text_field:title
+  br
+  = f.label :body
+  = f.text_area(:body, cols: 100, rows: 10)
   = f.submit

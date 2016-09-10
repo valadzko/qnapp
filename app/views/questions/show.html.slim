@@ -4,6 +4,7 @@ p
 = @question.body
 - if user_signed_in? && current_user.author_of?(@question)
   p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
+  p = link_to 'Edit', edit_question_path(@question) 
 
 .answers
   = render 'answers'
