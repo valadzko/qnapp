@@ -1,8 +1,8 @@
 class AnswersController < ApplicationController
-  before_action :authenticate_user!, only: [:create, :destroy]
-  before_action :find_question, only: [:create, :destroy]
-  before_action :find_answer, only: [:destroy]
-  before_action :must_be_author!, only: [:destroy]
+  before_action :authenticate_user!, only: [:create, :destroy, :update]
+  before_action :find_question, only: [:create, :destroy, :update]
+  before_action :find_answer, only: [:destroy, :update]
+  before_action :must_be_author!, only: [:destroy, :update]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
@@ -11,6 +11,10 @@ class AnswersController < ApplicationController
   def destroy
     @answer.destroy
     redirect_to @question
+  end
+
+  def update
+    @answer.update(answer_params)
   end
 
   private

@@ -6,8 +6,8 @@ feature 'Edit question', %q{
   I want to be able to edit my question
 } do
 
-  given(:author){ create(:user) }
-  given(:question) {create(:question, user: author)}
+  given!(:author){ create(:user) }
+  given!(:question) {create(:question, user: author)}
   scenario 'Author can edit his question' do
     sign_in(author)
     visit question_path(question)
