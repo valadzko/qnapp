@@ -4,6 +4,7 @@
   - if user_signed_in? && current_user.author_of?(answer)
     p = link_to 'Delete answer', [answer.question, answer],
       method: :delete,
+      remote: true,
       data: { confirm: 'This will delete you answer. Are you sure?' }
     p = link_to 'Edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
     p = form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|

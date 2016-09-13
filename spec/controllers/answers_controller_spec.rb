@@ -28,7 +28,7 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirect to question path' do
+      it 'render create template' do
         post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
         expect(response).to render_template :create
       end
@@ -70,12 +70,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'author of answer' do
       it 'deletes the answer' do
-        expect{delete :destroy, id: @answer, question_id: @question}.to change(Answer, :count).by(-1)
+        expect{delete :destroy, id: @answer, question_id: @question, format: :js}.to change(Answer, :count).by(-1)
       end
 
-      it 'redirect to question path' do
-        delete :destroy, id: @answer, question_id: @question
-        expect(response).to redirect_to @question
+      it 'render template destroy' do
+        delete :destroy, id: @answer, question_id: @question, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -86,12 +86,12 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'does not delete answer' do
-        expect{ delete :destroy, id: @answer, question_id: @question }.to_not change(Answer, :count)
+        expect{ delete :destroy, id: @answer, question_id: @question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirect to question path' do
-        delete :destroy, id: @answer, question_id: @question
-        expect(response).to redirect_to @question
+      it 'render template destroy' do
+        delete :destroy, id: @answer, question_id: @question, format: :js
+        expect(response).to render_template :destroy
       end
     end
   end

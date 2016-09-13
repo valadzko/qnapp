@@ -13,14 +13,14 @@ feature 'Delete answer', %q{
     @answer = create(:answer, question: @question, user: user)
   end
 
-  scenario 'Author of answer delete answer on his question' do
+  scenario 'Author of answer delete answer on his question', js: true do
     visit question_path(@question)
     click_on 'Delete answer'
     expect(page).to have_current_path(question_path(@question))
     expect(page).to_not have_content(@answer.body)
   end
 
-  scenario 'Non-author can not delete answer' do
+  scenario 'Non-author can not delete answer', js: true do
     sign_out
     sign_in(create(:user))
     visit question_path(@question)
