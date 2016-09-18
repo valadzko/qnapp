@@ -3,5 +3,9 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').html('<%= j render 'questions/answers' %>');
+  // $('.delete-answer-link').click(function(e) {
+  //   e.preventDefault();
+  //   answer_id = $(this).data('answerId');
+  //   $('#answer-' + answer_id).remove();
+  // });
 <% end %>
