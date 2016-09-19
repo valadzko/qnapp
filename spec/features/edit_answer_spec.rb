@@ -28,17 +28,29 @@ feature 'Edit answer', %q{
     end
 
     scenario 'Author tries to edit his answer', js: true do
-    #  click_on 'Edit'
+      click_on 'Edit'
       within '.answers' do
         fill_in 'answer_body', with: 'New edited answer text'
         click_on 'Save'
         expect(page).to_not have_content answer.body
         expect(page).to have_content 'New edited answer text'
-#        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector 'textarea'
       end
     end
 
-
-    scenario 'Authenticated user tries to edit other\'s answer'
+    scenario 'Authenticated user tries to edit other\'s answer', js: true do
+      sign_out
+      other_user = create(:user)
+      answer2 = create(:answer, question: question, user: other_user)
+      sign_in(other_user)
+      visit question_path(question)
+      within '.answer#' + "answer-#{answer.id}" do
+        expect(page).to_not have_link 'Edit'
+      end
+      # just to be sure that we can edit our answer on the same page
+      within '.answer#' + "answer-#{answer2.id}" do
+        expect(page).to have_link 'Edit'
+      end
+    end
   end
 end
