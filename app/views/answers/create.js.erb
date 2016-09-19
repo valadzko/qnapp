@@ -4,5 +4,5 @@
   <% end %>
 <% else %>
   $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
+  $('textarea#answer_body').val('');
 <% end %>

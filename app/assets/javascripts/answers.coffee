@@ -2,8 +2,9 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
-  $('.delete-answer-link').click (e) ->
+  $('.edit-answer-link').click (e) ->
     e.preventDefault()
+    $(this).hide()
     answer_id = $(this).data('answerId')
-    $('#answer-' + answer_id).remove()
+    $('form#edit-answer-' + answer_id).show()
     return
