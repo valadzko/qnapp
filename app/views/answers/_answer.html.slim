@@ -1,7 +1,7 @@
 - if answer.persisted?
   .answer id="answer-#{answer.id}"
     br
-    = answer.body
+    .answer-body = answer.body
     - if user_signed_in? && current_user.author_of?(answer)
       p = link_to 'Delete answer', [answer.question, answer],
         method: :delete, remote: true, data: { confirm: "This will delete your answer. Continue?" }
