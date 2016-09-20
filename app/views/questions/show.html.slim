@@ -1,14 +1,22 @@
-h2 = @question.title
+.question-title
+  h2 = @question.title
 hr
-= @question.body
+.question-body
+  = @question.body
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
    br
    by #{@question.user.email}
 - if user_signed_in? && current_user.author_of?(@question)
   p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
-  p = link_to 'Edit', edit_question_path(@question)
-
+  p = link_to 'Edit', '', class: 'edit-question-link'
+  .question-errors
+  p = form_for @question, remote: true, class:'edit-question' do |f|
+    = f.text_field :title
+    br 
+    = f.text_area(:body, cols: 100, rows: 10)
+    br
+    = f.submit 'Save'
 .answers
   = render 'answers/answers'
 
