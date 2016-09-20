@@ -1,7 +1,10 @@
-h2 Detailed view for question
-= @question.title
-p
+h2 = @question.title
+hr
 = @question.body
+.user_info
+   Asked #{@question.created_at.strftime("%d %b. %Y")}
+   br
+   by #{@question.user.email}
 - if user_signed_in? && current_user.author_of?(@question)
   p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
   p = link_to 'Edit', edit_question_path(@question)
@@ -18,6 +21,3 @@ p
     = f.submit "Post Your Answer"
 - else
   h4 You need to login to answer the question
-
-p = link_to "All questions", questions_path
-= render "layouts/sign"

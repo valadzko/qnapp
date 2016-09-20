@@ -2,6 +2,10 @@
   .answer id="answer-#{answer.id}"
     br
     .answer-body = answer.body
+    .user_info
+       Answered #{answer.created_at.strftime("%d %b. %Y")}
+       br
+       by #{answer.user.email}
     - if user_signed_in? && current_user.author_of?(answer)
       p = link_to 'Delete answer', [answer.question, answer],
         method: :delete, remote: true, data: { confirm: "This will delete your answer. Continue?" }
@@ -9,7 +13,7 @@
       p = form_for [@question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
         = f.label :body, 'Answer'
         br
-        = f.text_area(:body, cols: 80, rows: 7) 
+        = f.text_area(:body, cols: 80, rows: 7)
         br
         = f.submit 'Save'
     hr
