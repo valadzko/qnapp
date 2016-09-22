@@ -1,6 +1,7 @@
 .question-title
   h2 = @question.title
 hr
+
 .question-body
   = @question.body
 .user_info
@@ -13,7 +14,7 @@ hr
   .question-errors
   p = form_for @question, remote: true, class:'edit-question' do |f|
     = f.text_field :title
-    br 
+    br
     = f.text_area(:body, cols: 100, rows: 10)
     br
     = f.submit 'Save'

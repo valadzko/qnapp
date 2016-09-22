@@ -1,5 +1,7 @@
 - if answer.persisted?
   .answer id="answer-#{answer.id}"
+    .votecell
+      p = image_tag("icon_best_answer_candidate", size: "40x40")
     br
     .answer-body = answer.body
     .user_info
