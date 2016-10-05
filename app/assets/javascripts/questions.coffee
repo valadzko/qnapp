@@ -3,6 +3,7 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
   $('.edit-question-link').click (e) ->
+    console.log('edit-question-link clicked')
     e.preventDefault()
     $(this).hide()
     $('.edit_question').show()

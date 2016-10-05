@@ -1,10 +1,9 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
 $ ->
   $('.edit-answer-link').click (e) ->
+    console.log('edit-answer-link clicked')
     e.preventDefault()
     $(this).hide()
     answer_id = $(this).data('answerId')
+    console.log('Your answer id is' + answer_id)
     $('form#edit-answer-' + answer_id).show()
     return

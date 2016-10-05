@@ -3,8 +3,8 @@
     $('.question-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.question-title').html('<%= @question.title %>');
-  $('.question-body').html('<%= @question.body %>');
-  $('.edit-question').hide();
+  $('.question-title').find("h2").html("<%= @question.title %>");
+  $('.question-body').find("p").html("<%= @question.body %>");
+  $('.edit_question').hide();
   $('.edit-question-link').show();
 <% end %>

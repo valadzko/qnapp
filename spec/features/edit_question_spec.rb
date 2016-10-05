@@ -11,7 +11,7 @@ feature 'Edit question', %q{
   scenario 'Author can edit his question' do
     sign_in(author)
     visit question_path(question)
-    click_on 'Edit' # same as expect(page).to have_link 'Edit'
+    click_on 'edit' # same as expect(page).to have_link 'Edit'
     edited_title = question.title + 'title_appendix'
     edited_body = question.body + 'body_appendix'
     fill_in 'question_title', with: edited_title
@@ -28,13 +28,12 @@ feature 'Edit question', %q{
     non_author = create(:user)
     sign_in(non_author)
     visit question_path(question)
-    expect(page).to_not have_link 'Edit' # how to apply only to question?
-    # how to protect us from direct get request? should we have this test as feature?
+    expect(page).to_not have_link 'edit'
   end
 
   scenario 'Non-authenticated user can not edit the question' do
     visit question_path(question)
-    expect(page).to_not have_link 'Edit'
+    expect(page).to_not have_link 'edit'
   end
 
 

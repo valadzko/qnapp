@@ -14,7 +14,7 @@ feature 'Delete question', %q{
 
   scenario 'Autheticated user who asked the question delete it' do
     visit question_path(@question)
-    click_on 'Delete question'
+    click_on 'delete'
     expect(page).to have_current_path(questions_path)
     expect(page).to_not have_content @question.title
   end
@@ -23,12 +23,12 @@ feature 'Delete question', %q{
     sign_out
     sign_in(create(:user))
     visit question_path(@question)
-    expect(page).to_not have_link 'Delete question'
+    expect(page).to_not have_link 'delete'
   end
 
   scenario 'Non-authenticated user can not see the Delete question link' do
     sign_out
     visit question_path(@question)
-    expect(page).to_not have_link 'Delete question'
+    expect(page).to_not have_link 'delete'
   end
 end

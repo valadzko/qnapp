@@ -3,8 +3,7 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('#answer-' + '<%= @answer.id %> >div').html('<%= @answer.body %>');
+  $('#answer-'+ '<%= @answer.id %>').find('.answer-body').html('<%= @answer.body %>');
   $('form#edit-answer-' + '<%= @answer.id %>').hide();
-  // does not look good, but works.. probably have to be refactored
-  $('#answer-'+ '<%= @answer.id %>').find("a").show();
+  $('#answer-'+ '<%= @answer.id %>').find('.edit-answer-link').show();
 <% end %>

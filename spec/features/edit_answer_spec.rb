@@ -12,7 +12,9 @@ feature 'Edit answer', %q{
 
   scenario 'Unauthenticated user tries to edit the answer' do
     visit question_path(question)
-    expect(page).to_not have_link 'Edit'
+    within '.answer#' + "answer-#{answer.id}" do
+      expect(page).to_not have_link 'edit'
+    end
   end
 
   describe 'Authenticated user' do
@@ -22,13 +24,13 @@ feature 'Edit answer', %q{
     end
 
     scenario 'Author sees link to Edit answer' do
-      within '.answers' do
-        expect(page).to have_link 'Edit'
+      within '.answer#' + "answer-#{answer.id}" do
+        expect(page).to have_link 'edit'
       end
     end
 
     scenario 'Author tries to edit his answer', js: true do
-      click_on 'Edit'
+      click_on 'edit'
       within '.answers' do
         fill_in 'answer_body', with: 'New edited answer text'
         click_on 'Save'
@@ -45,11 +47,11 @@ feature 'Edit answer', %q{
       sign_in(other_user)
       visit question_path(question)
       within '.answer#' + "answer-#{answer.id}" do
-        expect(page).to_not have_link 'Edit'
+        expect(page).to_not have_link 'edit'
       end
       # just to be sure that we can edit our answer on the same page
       within '.answer#' + "answer-#{answer2.id}" do
-        expect(page).to have_link 'Edit'
+        expect(page).to have_link 'edit'
       end
     end
   end
