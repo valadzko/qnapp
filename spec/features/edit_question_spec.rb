@@ -8,7 +8,7 @@ feature 'Edit question', %q{
 
   given!(:author){ create(:user) }
   given!(:question) {create(:question, user: author)}
-  scenario 'Author can edit his question' do
+  scenario 'Author can edit his question', js: true do
     sign_in(author)
     visit question_path(question)
     click_on 'edit' # same as expect(page).to have_link 'Edit'
@@ -16,7 +16,7 @@ feature 'Edit question', %q{
     edited_body = question.body + 'body_appendix'
     fill_in 'question_title', with: edited_title
     fill_in 'question_body', with: edited_body
-    click_on 'Update Question'
+    click_on 'Save'
 # TODO:
 #    within ('.question') do
     expect(page).to have_content edited_title

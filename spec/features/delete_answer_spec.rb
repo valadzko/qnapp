@@ -15,8 +15,8 @@ feature 'Delete answer', %q{
 
   scenario 'Author of answer delete answer on his question', js: true do
     visit question_path(@question)
-    within '.answer#' + "answer-#{@answer.id}" do
-      click_on 'delete'
+    within '.answers' do
+      click_on 'delete', match: :first
       expect(page).to have_current_path(question_path(@question))
       expect(page).to_not have_content(@answer.body)
     end
