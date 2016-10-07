@@ -21,9 +21,9 @@ feature 'Select Best Answer', %q{
 #    scenario 'There is only one best answer at the time for one question'
   end
 
-  describe 'Non-author of the question' do
-    scenario ''
-  end
+  # describe 'Non-author of the question' do
+  #   scenario ''
+  # end
 
 #  scenario 'Author of the question re-pick best answer'
 

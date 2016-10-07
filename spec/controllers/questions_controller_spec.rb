@@ -71,37 +71,37 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
-  describe 'GET #edit' do
-    sign_in_user
-    before { get :edit, id: question }
-
-    it 'assign the requested question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
+  # describe 'GET #edit' do
+  #   sign_in_user
+  #   before { get :edit, id: question }
+  #
+  #   it 'assign the requested question to @question' do
+  #     expect(assigns(:question)).to eq question
+  #   end
+  #
+  #   it 'renders edit view' do
+  #     expect(response).to render_template :edit
+  #   end
+  # end
 
   describe 'PATCH #update' do
     sign_in_user
     context 'with valid attributes' do
       it 'assings the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question)
+        patch :update, id: question, question: attributes_for(:question), format: :js
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, id: question, question: { title: 'new title', body: 'my new long valid body' }
+        patch :update, id: question, question: { title: 'new title', body: 'my new long valid body' }, format: :js
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'my new long valid body'
       end
 
-      it 'redirect to updated @question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(response).to redirect_to :question
+      it 'render template update' do
+        patch :update, id: question, question: attributes_for(:question), format: :js
+        expect(response).to render_template :update
       end
     end
 
@@ -111,15 +111,10 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question attributes' do
         title_before_try = question.title
         body_before_try = question.body
-        patch :update, id: question, question: { title: 'new title', body: nil }
+        patch :update, id: question, question: { title: 'new title', body: nil }, format: :js
         question.reload
         expect(question.title).to eq title_before_try
         expect(question.body).to eq body_before_try
-      end
-
-      it 're-renders edit view' do
-        patch :update, id: question, question: { title: 'new title', body: nil }
-        expect(response).to render_template :edit
       end
     end
   end
