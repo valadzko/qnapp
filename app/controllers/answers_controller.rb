@@ -1,11 +1,16 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update]
-  before_action :find_question, only: [:create, :destroy, :update]
-  before_action :find_answer, only: [:destroy, :update]
-  before_action :must_be_author!, only: [:destroy, :update]
+  before_action :find_question, only: [:create, :destroy, :update, :accept]
+  before_action :find_answer, only: [:destroy, :update, :accept]
+  before_action :must_be_author!, only: [:destroy, :update, :accept]
 
   def create
     @answer = @question.answers.create(answer_params.merge(user: current_user))
+  end
+
+  def accept
+    @question.answers.update_all(accepted:false)
+    @answer.update(accepted: true)
   end
 
   def destroy

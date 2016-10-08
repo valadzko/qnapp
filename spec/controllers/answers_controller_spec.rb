@@ -61,6 +61,41 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'GET #accept' do
+    sign_in_user
+    before do
+      @question = create(:question, user: @user)
+      @answer = create(:answer, question: @question, user: @user)
+    end
+    context 'author of question' do
+      before do
+        @accepted = @answer.accepted
+        xhr :get, :accept, id: @answer.id, question_id: @question.id, format: :js
+      end
+      it 'assigns the requested answer to @answer' do
+        expect(assigns(:question)).to eq @question
+      end
+      it 'assigns the requested question to @question' do
+        expect(assigns(:answer)).to eq @answer
+      end
+      it 'change answer accepted status' do
+        @answer.reload
+        expect(@answer.accepted).to eq !@accepted
+      end
+    end
+
+    context 'Non-author of question' do
+      it 'can not change the accepted status of answer' do
+        sign_out(@user)
+        sign_in(create(:user))
+        accepted = @answer.accepted
+        xhr :get, :accept, id: @answer.id, question_id: @question.id, format: :js
+        @answer.reload
+        expect(@answer.accepted).to eq accepted
+      end
+    end
+  end
+
   describe 'DELETE #destroy' do
     sign_in_user
     before do

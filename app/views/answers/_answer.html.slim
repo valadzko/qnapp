@@ -1,7 +1,9 @@
 - if answer.persisted?
   .answer id="answer-#{answer.id}"
     .votecell
+    - if user_signed_in? && current_user.author_of?(answer.question)
       p = image_tag("icon_best_answer_candidate", size: "40x40")
+      p = link_to 'accept', accept_question_answer_path(answer.question, answer), remote: true
     br
     .answer-body = answer.body
     .user_info
