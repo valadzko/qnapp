@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update]
-  before_action :find_question, only: [:create, :destroy, :update, :accept]
+  before_action :find_question, only: [:create]
   before_action :find_answer, only: [:destroy, :update, :accept]
   before_action :must_be_author!, only: [:destroy, :update, :accept]
 
@@ -9,8 +9,7 @@ class AnswersController < ApplicationController
   end
 
   def accept
-    @question.answers.update_all(accepted:false)
-    @answer.update(accepted: true)
+    @answer.mark_as_accepted
   end
 
   def destroy
@@ -38,6 +37,7 @@ class AnswersController < ApplicationController
   end
 
   def find_answer
+    find_question
     @answer = @question.answers.find(params[:id])
   end
 end
