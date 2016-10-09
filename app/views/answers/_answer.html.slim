@@ -3,7 +3,9 @@
     .votecell
     - if user_signed_in? && current_user.author_of?(answer.question)  
       = link_to accept_question_answer_path(answer.question, answer), remote: true do
-        == image_tag "#{answer.accepted? ? 'accepted' : 'accept'}", size: "40x40"
+        == image_tag "#{answer.accepted? ? 'accepted' : 'accept'}", size: "40x40", class: "accept-icon"
+    - elsif answer.accepted?
+      = image_tag 'accepted', size: "40x40"
     br
     .answer-body = answer.body
     .user_info

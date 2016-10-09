@@ -12,7 +12,7 @@ feature 'Select Best Answer', %q{
       answer = create(:answer, question: question)
       sign_in(author)
       visit question_path(question)
-      expect(page).to have_link 'accept as best'
+      expect(page).to have_css("img[src*='accept']")
     end
 
     scenario 'pick best answer' do
@@ -31,7 +31,7 @@ feature 'Select Best Answer', %q{
        answer = create(:answer, question: question)
        sign_in(create(:user))
        visit question_path(question)
-       expect(page).to_not have_link 'accept as best'
+       expect(page).to_not have_css("img[src*='accept']")
      end
    end
 

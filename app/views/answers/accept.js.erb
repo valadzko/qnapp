@@ -3,6 +3,10 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-//  $('.answers').append('<%= j render @answer %>');
-//  $('.new_answer').find("textarea").val('');
+  //change accept-icon to default for the first answer
+  icon = $('#answer-<%= @answer.id %>').find(".accept-icon").attr("src");
+  $( ".accept-icon" ).first().attr("src", icon);
+  //render the accepted answer, moving it to the first place
+  $('#answer-<%= @answer.id %>').remove();
+  $('<%= j render @answer %>').insertAfter( $("#answers-label"));
 <% end %>
