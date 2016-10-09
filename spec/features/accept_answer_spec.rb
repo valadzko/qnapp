@@ -6,37 +6,65 @@ feature 'Select Best Answer', %q{
   I want to be able to pick the best answer
 }do
   describe 'Author of the question' do
-    scenario 'can see accept answer button' do
+
+    before(:each) do
       author = create(:user)
-      question = create(:question, user: author)
-      answer = create(:answer, question: question)
+      @question = create(:question, user: author)
+      @answer = create_list(:answer, 3, question: @question, user: author)
       sign_in(author)
-      visit question_path(question)
-      expect(page).to have_css("img[src*='accept']")
     end
 
-    scenario 'pick best answer' do
-
+    scenario 'can see accept answer button for answer' do
+      visit question_path(@question)
+      expect(page).to have_css('.accept-link', count: 3)
     end
 
-    scenario 'can not pick best answer as best answer'
-#    scenario 'after pick best answer displayed first in the list'
-#    scenario 'There is only one best answer at the time for one question'
+    scenario 'mark accepted answer', js: true do
+      visit question_path(@question)
+      expect(page).to have_css('.accept-link', count: 3)
+      expect(page).to_not have_css('.accepted-link')
+      first(:xpath, '//*[@class="accept-link"]').click
+      expect(page).to have_css('.accept-link', count: 2)
+      expect(page).to have_css('.accepted-link', count: 1)
+    end
+
+    scenario 'can unmark accepted answer', js: true do
+      @answer.first.mark_as_accepted
+      visit question_path(@question)
+      expect(page).to have_css('.accept-link', count: 2)
+      expect(page).to have_css('.accepted-link')
+      find(:xpath, '//*[@class="accepted-link"]').click
+      expect(page).to have_css('.accept-link', count: 3)
+    end
+
+    scenario 'accepted answer displayed first', js: true do
+      visit question_path(@question)
+      within '.answers' do
+        expect(page).to have_css('.accept-link', count: 3)
+        expect(page).to_not have_css('.accepted-link')
+        first_before = first('.answer').inspect
+        all(:xpath, '//*[@class="accept-link"]')[1].click
+        sleep(2)
+        first_after = first('.answer').inspect
+        expect(first_after).to_not eq first_before
+      end
+    end
   end
 
   describe 'Non-author of the question' do
-     scenario 'can not see accept answer button' do
-       author = create(:user)
-       question = create(:question, user: author)
-       answer = create(:answer, question: question)
-       sign_in(create(:user))
-       visit question_path(question)
-       expect(page).to_not have_css("img[src*='accept']")
+    before do
+      @answer = create(:answer)
+      sign_in(create(:user))
+    end
+     scenario 'can not see accept answer link' do
+       visit question_path(@answer.question)
+       expect(page).to_not have_css('.accept-link')
+     end
+     scenario 'can see accepted mark' do
+       @answer.mark_as_accepted
+       sign_out
+       visit question_path(@answer.question)
+       expect(page).to have_css("img[src*='accepted']")
      end
    end
-
-#  scenario 'Author of the question re-pick best answer'
-
-
-
 end
