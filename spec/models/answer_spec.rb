@@ -10,9 +10,8 @@ RSpec.describe Answer, type: :model do
   let(:answer) {create(:answer, question: question, user: user)}
   context 'Validate changing answer accept status' do
     it 'change the answer status' do
-      status = answer.accepted
       answer.mark_as_accepted
-      expect(answer.accepted).to eq !status
+      expect(answer).to be_accepted
     end
     it '(only one accepted) change accepted status from answer if other answer was accepted' do
       answer2 = create(:answer, question: question, user: user)
@@ -20,8 +19,8 @@ RSpec.describe Answer, type: :model do
       answer2.mark_as_accepted
       answer.reload
       answer2.reload
-      expect(answer.accepted).to eq false
-      expect(answer2.accepted).to eq true
+      expect(answer).to_not be_accepted
+      expect(answer2).to be_accepted
     end
   end
 end

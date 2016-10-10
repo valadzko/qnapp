@@ -46,9 +46,6 @@ RSpec.describe AnswersController, type: :controller do
       it 'assings the requested answer to @answer' do
         expect(assigns(:answer)).to eq answer
       end
-      it 'assigns the @question related to answer' do
-        expect(assigns(:question)).to eq question
-      end
       it 'render update template' do
         expect(response).to render_template :update
       end
@@ -73,9 +70,6 @@ RSpec.describe AnswersController, type: :controller do
         xhr :get, :accept, id: @answer.id, question_id: @question.id, format: :js
       end
       it 'assigns the requested answer to @answer' do
-        expect(assigns(:question)).to eq @question
-      end
-      it 'assigns the requested question to @question' do
         expect(assigns(:answer)).to eq @answer
       end
       it 'change answer accepted status' do
@@ -89,7 +83,7 @@ RSpec.describe AnswersController, type: :controller do
         sign_out(@user)
         sign_in(create(:user))
         accepted = @answer.accepted
-        xhr :get, :accept, id: @answer.id, question_id: @question.id, format: :js
+        xhr :get, :accept, id: @answer.id, question_id: @answer.question.id, format: :js
         @answer.reload
         expect(@answer.accepted).to eq accepted
       end

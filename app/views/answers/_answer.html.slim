@@ -3,9 +3,9 @@
     .votecell
       - if user_signed_in? && current_user.author_of?(answer.question)  
         - if answer.accepted?
-          = link_to(image_tag('accepted', size: "40x40", class: "accepted-icon"), accept_question_answer_path(answer.question, answer), remote: true, class: 'accepted-link')
+          = link_to(image_tag('accepted', size: "40x40", class: "accepted-icon"), accept_answer_path(answer), remote: true, class: 'accepted-link')
         - else
-          = link_to(image_tag('accept', size: "40x40", class: "accept-icon"), accept_question_answer_path(answer.question, answer), remote: true, class: 'accept-link')
+          = link_to(image_tag('accept', size: "40x40", class: "accept-icon"), accept_answer_path(answer), remote: true, class: 'accept-link')
       - elsif answer.accepted?
         = image_tag 'accepted', size: "40x40", class: "accepted-icon"
     br
@@ -15,11 +15,11 @@
        br
        by #{answer.user.email}
     - if user_signed_in? && current_user.author_of?(answer)
-      p = link_to 'delete', [answer.question, answer], class: 'delete-answer-link',
+      p = link_to 'delete', answer, class: 'delete-answer-link',
         method: :delete, remote: true, data: { confirm: "This will delete your answer #{answer.id}. Continue?" }
       p = link_to 'edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       br
-      p = form_for [answer.question, answer], remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
+      p = form_for answer, remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|
         = f.label :body, 'Answer'
         br
         = f.text_area(:body, cols: 80, rows: 7)
