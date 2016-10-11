@@ -7,7 +7,10 @@ html
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
   body
-    p.notice= notice
-    p.alert= alert
-    = content_tag(:div, flash[:error], :id => "flash_error") if flash[:error]
-    = yield
+    div class="centered-container"
+      = render 'layouts/header'
+      p.notice= notice
+      p.alert= alert
+      = content_tag(:div, flash[:error], :id => "flash_error") if flash[:error]
+      .content
+        = yield

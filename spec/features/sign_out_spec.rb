@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User can sign out', %q{
   In order to use the site on public computers
@@ -8,7 +8,7 @@ feature 'User can sign out', %q{
 
   scenario 'Signed-in tries to sign out' do
     sign_in create(:user)
-    visit questions_path
+    visit root_path
     expect(page).to_not have_selector(:link_or_button, 'Sign in')
     expect(page).to_not have_selector(:link_or_button, 'Sign up')
     click_on 'Sign out'

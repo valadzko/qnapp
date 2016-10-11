@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'User sign in', %q{
   In order to be able to ask question
@@ -7,7 +7,7 @@ feature 'User sign in', %q{
 } do
 
   scenario 'Registered user tries to sign in' do
-    visit questions_path
+    visit root_path
     expect(page).to have_selector(:link_or_button, 'Sign in')
     sign_in create(:user)
 

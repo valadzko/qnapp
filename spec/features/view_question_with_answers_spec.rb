@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'View question and answers', %q{
   In order to view the whole question and existing answers to it,

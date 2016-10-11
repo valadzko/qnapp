@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'Delete answer', %q{
   In order to don't be ashamed for your answer
@@ -13,17 +13,21 @@ feature 'Delete answer', %q{
     @answer = create(:answer, question: @question, user: user)
   end
 
-  scenario 'Author of answer delete answer on his question' do
+  scenario 'Author of answer delete answer on his question', js: true do
     visit question_path(@question)
-    click_on 'Delete answer'
-    expect(page).to have_current_path(question_path(@question))
-    expect(page).to_not have_content(@answer.body)
+    within '.answers' do
+      click_on 'delete', match: :first
+      expect(page).to have_current_path(question_path(@question))
+      expect(page).to_not have_content(@answer.body)
+    end
   end
 
-  scenario 'Non-author can not delete answer' do
+  scenario 'Non-author can not delete answer', js: true do
     sign_out
     sign_in(create(:user))
     visit question_path(@question)
-    expect(page).to_not have_link 'Delete Answer'
+    within '.answer#' + "answer-#{@answer.id}" do
+      expect(page).to_not have_link 'delete'
+    end
   end
 end

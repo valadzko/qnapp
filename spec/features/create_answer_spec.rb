@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative 'features_helper'
 
 feature 'Create Answer on question', %q{
   In order to share my brilliant knowledge and experience
@@ -23,7 +23,7 @@ feature 'Create Answer on question', %q{
     fill_in 'answer_body', with: '' # just to make sure it is empty
     click_on 'Post Your Answer'
     expect_page_to_have_question(question)
-    expect(question.answers.count).to eq 0
+    expect(page).to have_content "Body can't be blank"
   end
 
   scenario 'Non-authenticated user can not create answer on the question'do

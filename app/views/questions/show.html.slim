@@ -1,22 +1,35 @@
-h2 Detailed view for question
-= @question.title
-p
-= @question.body
-- if user_signed_in? && current_user.author_of?(@question)
-  p = link_to 'Delete question', @question, :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
+.question-title
+  h2 = @question.title
+hr
 
+.question-body
+  p = @question.body
+.user_info
+   Asked #{@question.created_at.strftime("%d %b. %Y")}
+   br
+   by #{@question.user.email}
+- if user_signed_in? && current_user.author_of?(@question)  
+  p = link_to 'delete', @question, class: 'delete-question-link', :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
+  p = link_to 'edit', '', class: 'edit-question-link'
+  .question-errors
+  p = form_for @question, remote: true, class:'edit-question' do |f|
+    br
+    = f.text_field :title
+    br
+    = f.text_area(:body, cols: 100, rows: 10)
+    br
+    = f.submit 'Save'
+br
+hr
 .answers
-  = render 'answers'
+  = render 'answers/answers'
 
 - if user_signed_in?
-  h1 Add your answer:
   p = form_for [@question, @question.answers.create], remote: true do |f|
-    = f.label 'Body'
+    = f.label 'Add your answer'
+    .answer-errors
     = f.text_area(:body, cols: 80, rows: 7)
     p
     = f.submit "Post Your Answer"
 - else
   h4 You need to login to answer the question
-
-p = link_to "All questions", questions_path
-= render "layouts/sign"

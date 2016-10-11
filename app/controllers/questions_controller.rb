@@ -1,6 +1,6 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :find_question, only: [:show, :update, :destroy]
   before_action :must_be_author!, only: [:destroy]
 
   def index
@@ -14,9 +14,6 @@ class QuestionsController < ApplicationController
     @question = Question.new
   end
 
-  def edit
-  end
-
   def create
     @question = Question.new(question_params)
     @question.user = current_user
@@ -28,11 +25,7 @@ class QuestionsController < ApplicationController
   end
 
   def update
-    if @question.update(question_params)
-      redirect_to @question
-    else
-      render :edit
-    end
+    @question.update(question_params)
   end
 
   def destroy

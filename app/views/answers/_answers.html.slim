@@ -1,6 +1,5 @@
 - unless @question.answers.empty?
-  hr
+  h3 id="answers-label" Answers:
   = render @question.answers
 - else
-  br
   h3 No answers so far

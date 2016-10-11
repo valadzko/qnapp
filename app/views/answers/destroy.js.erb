@@ -3,6 +3,5 @@
     $('.answer-errors').html('<%= j message %>');
   <% end %>
 <% else %>
-  $('.answers').append('<%= j render @answer %>');
-  $('.new_answer').find("textarea").val('');
+  $('#answer-<%= @answer.id %>').remove();
 <% end %>

@@ -28,9 +28,64 @@ RSpec.describe AnswersController, type: :controller do
         expect { post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirect to question path' do
+      it 'render create template' do
         post :create, answer: attributes_for(:invalid_answer), question_id: question, format: :js
         expect(response).to render_template :create
+      end
+    end
+  end
+
+  describe 'PATCH #update' do
+    sign_in_user
+    let(:answer) { create(:answer, question: question, user: @user) }
+
+    context 'regular patch' do
+      before do
+        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+      end
+      it 'assings the requested answer to @answer' do
+        expect(assigns(:answer)).to eq answer
+      end
+      it 'render update template' do
+        expect(response).to render_template :update
+      end
+    end
+
+    it 'changes answer attributes' do
+      patch :update, id: answer, question_id: question, answer: {body: 'new answer body for question'}, format: :js
+      answer.reload
+      expect(answer.body).to eq 'new answer body for question'
+    end
+  end
+
+  describe 'GET #accept' do
+    sign_in_user
+    before do
+      @question = create(:question, user: @user)
+      @answer = create(:answer, question: @question, user: @user)
+    end
+    context 'author of question' do
+      before do
+        @accepted = @answer.accepted
+        xhr :get, :accept, id: @answer.id, question_id: @question.id, format: :js
+      end
+      it 'assigns the requested answer to @answer' do
+        expect(assigns(:answer)).to eq @answer
+      end
+      it 'change answer accepted status' do
+        @answer.reload
+        expect(@answer.accepted).to eq !@accepted
+      end
+    end
+
+    context 'Non-author of question' do
+      it 'can not change the accepted status of answer' do
+        sign_out(@user)
+        sign_in(create(:user))
+        accepted = @answer.accepted
+        xhr :get, :accept, id: @answer.id, question_id: @answer.question.id, format: :js
+        @answer.reload
+        expect(@answer.accepted).to eq accepted
       end
     end
   end
@@ -44,12 +99,12 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'author of answer' do
       it 'deletes the answer' do
-        expect{delete :destroy, id: @answer, question_id: @question}.to change(Answer, :count).by(-1)
+        expect{delete :destroy, id: @answer, question_id: @question, format: :js}.to change(Answer, :count).by(-1)
       end
 
-      it 'redirect to question path' do
-        delete :destroy, id: @answer, question_id: @question
-        expect(response).to redirect_to @question
+      it 'render template destroy' do
+        delete :destroy, id: @answer, question_id: @question, format: :js
+        expect(response).to render_template :destroy
       end
     end
 
@@ -60,12 +115,12 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'does not delete answer' do
-        expect{ delete :destroy, id: @answer, question_id: @question }.to_not change(Answer, :count)
+        expect{ delete :destroy, id: @answer, question_id: @question, format: :js }.to_not change(Answer, :count)
       end
 
-      it 'redirect to question path' do
-        delete :destroy, id: @answer, question_id: @question
-        expect(response).to redirect_to @question
+      it 'render template destroy' do
+        delete :destroy, id: @answer, question_id: @question, format: :js
+        expect(response).to redirect_to question_path(@question)
       end
     end
   end
