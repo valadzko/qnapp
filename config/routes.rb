@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   root to: "questions#index"
   resources :questions do
     resources :answers, shallow: true do
-      get 'accept', on: :member
+      get :accept, on: :member
     end
   end
 end
