@@ -8,7 +8,7 @@ hr
   p Attachments:
   ul 
     - @question.attachments.each do |a|
-      li = a.file.file.filename
+      li = link_to a.file.identifier, a.file.url
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
    br
