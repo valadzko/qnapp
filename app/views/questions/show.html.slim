@@ -4,6 +4,11 @@ hr
 
 .question-body
   p = @question.body
+.question-attachements
+  p Attachments:
+  ul 
+    - @question.attachments.each do |a|
+      li = a.file.file.filename
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
    br

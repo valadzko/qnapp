@@ -7,5 +7,10 @@
   p 
     = f.label :body
     = f.text_area(:body, cols: 100, rows: 10)
+  p Attachements:
+  p 
+    = f.fields_for :attachments do |a|
+       = a.label :file
+       = a.file_field :file 
   p 
     = f.submit "Post Your Question"
