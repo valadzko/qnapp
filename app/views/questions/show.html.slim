@@ -9,6 +9,7 @@ hr
   ul 
     - @question.attachments.each do |a|
       li = link_to a.file.identifier, a.file.url
+      /- if user_signed_in? && current_user.author_of?(@question)    
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
    br
@@ -23,6 +24,7 @@ hr
     br
     = f.text_area(:body, cols: 100, rows: 10)
     br
+    = render 'attachments', form: f
     = f.submit 'Save'
 br
 hr
@@ -34,10 +36,7 @@ hr
     = f.label 'Add your answer'
     .answer-errors
     = f.text_area(:body, cols: 80, rows: 7) 
-    = f.fields_for :attachments, f.object.attachments.build do |a|
-      = render 'attachment_fields', f: a
-    .links
-      = link_to_add_association 'add file', f, :attachments
+    = render 'attachments', form: f
     p
     = f.submit "Post Your Answer"
 - else
