@@ -9,8 +9,9 @@
     = f.text_area(:body, cols: 100, rows: 10)
   p Attachements:
   p 
-    = f.fields_for :attachments do |a|
-       = a.label :file
-       = a.file_field :file 
+  = f.fields_for :attachments, f.object.attachments.build do |a|
+    = render 'attachment_fields', f: a
+  .links
+    = link_to_add_association 'add file', f, :attachments
   p 
     = f.submit "Post Your Question"
