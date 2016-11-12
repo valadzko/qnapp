@@ -5,7 +5,7 @@ class Answer < ApplicationRecord
 
   validates :body,:user_id, presence: true
 
-  accepts_nested_attributes_for :attachments, allow_destroy: true
+  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   default_scope { order(accepted: :desc) }
 
