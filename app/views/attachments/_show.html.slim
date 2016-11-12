@@ -1,0 +1,6 @@
+.show-attachments
+  - if obj.attachments.any?
+    p Attachments:
+    ul 
+      - obj.attachments.each do |a|
+        li = link_to a.file.identifier, a.file.url

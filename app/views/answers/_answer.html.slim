@@ -11,10 +11,7 @@
     br
     .answer-body = answer.body
     .answer-attachements
-      p Attachments:
-      ul 
-        - answer.attachments.each do |a|
-          li = link_to a.file.identifier, a.file.url
+      = render "attachments/show", obj: answer
     .user_info
        Answered #{answer.created_at.strftime("%d %b. %Y")}
        br
@@ -29,6 +26,6 @@
         br
         = f.text_area(:body, cols: 80, rows: 7)
         br
-        = render 'questions/attachments', form: f
+        = render 'attachments/edit', f: f
         = f.submit 'Save'
     hr

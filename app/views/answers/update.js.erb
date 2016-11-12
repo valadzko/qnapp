@@ -4,6 +4,7 @@
   <% end %>
 <% else %>
   $('#answer-'+ '<%= @answer.id %>').find('.answer-body').html('<%= @answer.body %>');
+  $('#answer-'+ '<%= @answer.id %>').find('.show-attachments').html("<%= j render partial: 'attachments/show', locals: { obj: @answer }  %>");
   $('form#edit-answer-' + '<%= @answer.id %>').hide();
   $('#answer-'+ '<%= @answer.id %>').find('.edit-answer-link').show();
 <% end %>

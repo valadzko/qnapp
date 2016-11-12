@@ -4,11 +4,8 @@ hr
 
 .question-body
   p = @question.body
-.question-attachements
-  p Attachments:
-  ul 
-    - @question.attachments.each do |a|
-      li = link_to a.file.identifier, a.file.url
+.question-attachments
+  = render "attachments/show", obj: @question
       /- if user_signed_in? && current_user.author_of?(@question)    
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
@@ -23,8 +20,7 @@ hr
     = f.text_field :title
     br
     = f.text_area(:body, cols: 100, rows: 10)
-    br
-    = render 'attachments', form: f
+    = render 'attachments/edit', f: f
     = f.submit 'Save'
 br
 hr
@@ -36,7 +32,7 @@ hr
     = f.label 'Add your answer'
     .answer-errors
     = f.text_area(:body, cols: 80, rows: 7) 
-    = render 'attachments', form: f
+    = render 'attachments/edit', f: f
     p
     = f.submit "Post Your Answer"
 - else
