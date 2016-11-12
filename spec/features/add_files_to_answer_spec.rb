@@ -16,6 +16,7 @@ feature 'Add files to answer', %q{
   end
 
   scenario 'User add file when create question', js: true do
+    click_on 'add file'
     attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     click_on 'Post Your Answer'
     within '.answers' do
@@ -26,13 +27,10 @@ feature 'Add files to answer', %q{
   scenario 'User can attach two files to answer', js: true do
     click_on 'add file'
     click_on 'add file'
-    click_on 'add file'
-
-    sleep(3)
-    within all('#new_question .nested-fields').first do
+    within all('#new_answer .nested-fields').first do
       attach_file 'File', "#{Rails.root}/spec/spec_helper.rb"
     end
-    within all('#new_question .nested-fields').last do
+    within all('#new_answer .nested-fields').last do
       attach_file 'File', "#{Rails.root}/spec/rails_helper.rb"
     end
     click_on 'Post Your Answer'

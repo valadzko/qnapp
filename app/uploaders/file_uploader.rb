@@ -2,7 +2,6 @@
 
 class FileUploader < CarrierWave::Uploader::Base
 
-  delegate :identifier, to: :file
   # Include RMagick or MiniMagick support:
   # include CarrierWave::RMagick
   # include CarrierWave::MiniMagick
@@ -18,7 +17,7 @@ class FileUploader < CarrierWave::Uploader::Base
   end
 
   def identifier
-    self.file.identifier
+    self.file.identifier unless self.file.nil?
   end
 
   # Provide a default URL as a default if there hasn't been a file uploaded:
