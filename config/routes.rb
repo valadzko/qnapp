@@ -7,4 +7,5 @@ Rails.application.routes.draw do
       get :accept, on: :member
     end
   end
+  get '/attachments/:id', to: 'attachments#destroy', as: 'attachment'
 end
