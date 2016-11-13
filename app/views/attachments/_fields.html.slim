@@ -4,5 +4,5 @@
     = f.label :file
     = f.file_field :file
   - else
-    = link_to attachment.file.filename, attachment.file_url
+    = link_to attachment.file.identifier, attachment.file.url
   p = link_to_remove_association "remove file", f
