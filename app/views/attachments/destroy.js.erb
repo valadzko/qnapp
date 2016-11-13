@@ -1,0 +1,14 @@
+<% if @attachment.errors.present? %>
+  <% @attachment.errors.full_messages.each do |message| %>
+    $('.attachment-errors-'+'<%= @attachment.id %>').html('<%= j message %>');
+  <% end %>
+<% else %>
+  // check how many attachments in this section
+  if ($('.attachment-'+ '<%= @attachment.id %>').parent().children().size() == 1){
+    // if it is the last one - remove whole section with attachments
+    $('.attachment-'+ '<%= @attachment.id %>').parent().parent().remove();
+  } else {
+    // if there are any other - remove only this item from list
+    $('.attachment-'+ '<%= @attachment.id %>').remove();
+  }
+<% end %>

@@ -3,11 +3,7 @@ class AttachmentsController < ApplicationController
   before_action :must_be_author!, only: [:destroy]
 
   def destroy
-    if @attachment.destroy
-      render json: nil, status: :ok
-    else
-      render json: { errors:"Attachment has not been deleted" }, status: :not_modified
-    end
+    @attachment.destroy
   end
 
   private

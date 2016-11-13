@@ -3,9 +3,9 @@
     p Attachments:
     ul 
       - obj.attachments.each do |a|
-        .inline
-          li style="display: inline-block" 
+        li.inline(class="attachment-#{a.id}")
+          .div style="display: inline-block" 
             = link_to a.file.identifier, a.file.url
             - if user_signed_in? && current_user.author_of?(obj)
-              = link_to attachment_path(a), data: {:confirm => 'This will delete attachment'}, remote: true 
-                span.glyphicon.glyphicon-trash
+              = link_to 'delete file', attachment_path(a), remote: true 
+              .div(class="attachment-errors-#{a.id}")

@@ -9,26 +9,51 @@ feature 'Remove files from question', %q{
   given(:question){ create(:question, user: author) }
   given!(:file) { create(:attachment, attachable: question) }
 
-  scenario 'Author can remove attachment from question', js: true do
-    sign_in(author)
-    visit question_path(question)
-    expect(page).to have_content 'spec_helper.rb'
-    click_on 'edit'
-    click_on 'remove file'
-    click_on 'Save'
-    expect(page).to_not have_content 'spec_helper.rb'
+  describe 'During editing question ' do
+    scenario 'Author can remove attachment from question', js: true do
+      sign_in(author)
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      click_on 'edit'
+      click_on 'remove file'
+      click_on 'Save'
+      expect(page).to_not have_content 'spec_helper.rb'
+    end
+
+    scenario 'Non author can not remove file', js: true do
+      sign_in(create(:user))
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      expect(page).to_not have_link 'edit'
+    end
+
+    scenario 'Non authenticated user can not delete question file', js: true do
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      expect(page).to_not have_link 'edit'
+    end
   end
 
-  scenario 'Non author can not remove file', js: true do
-    sign_in(create(:user))
-    visit question_path(question)
-    expect(page).to have_content 'spec_helper.rb'
-    expect(page).to_not have_link 'edit'
-  end
+  describe 'Using "delete file" link near the attachments' do
+    scenario 'Author can remove attachment from question', js: true do
+      sign_in(author)
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      click_on 'delete file'
+      expect(page).to_not have_content 'spec_helper.rb'
+    end
 
-  scenario 'Non authenticated user can not delete question file', js: true do
-    visit question_path(question)
-    expect(page).to have_content 'spec_helper.rb'
-    expect(page).to_not have_link 'edit'
+    scenario 'Non author can not remove file', js: true do
+      sign_in(create(:user))
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      expect(page).to_not have_link 'delete file'
+    end
+
+    scenario 'Non authenticated user can not delete question file', js: true do
+      visit question_path(question)
+      expect(page).to have_content 'spec_helper.rb'
+      expect(page).to_not have_link 'delete file'
+    end
   end
 end

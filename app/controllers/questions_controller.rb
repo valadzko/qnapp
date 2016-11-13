@@ -23,7 +23,6 @@ class QuestionsController < ApplicationController
     if @question.save
       redirect_to @question
     else
-      puts "question.errors.messages: #{@question.errors.messages}"
       render :new
     end
   end
