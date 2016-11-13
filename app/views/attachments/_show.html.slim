@@ -1,0 +1,11 @@
+.show-attachments
+  - if obj.attachments.any?
+    p Attachments:
+    ul 
+      - obj.attachments.each do |a|
+        li.inline(class="attachment-#{a.id}")
+          .div style="display: inline-block" 
+            = link_to a.file.identifier, a.file.url
+            - if user_signed_in? && current_user.author_of?(obj)
+              = link_to 'delete file', attachment_path(a), remote: true 
+              .div(class="attachment-errors-#{a.id}")

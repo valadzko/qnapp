@@ -7,5 +7,6 @@
   p 
     = f.label :body
     = f.text_area(:body, cols: 100, rows: 10)
+    = render "attachments/edit", f: f
   p 
     = f.submit "Post Your Question"

@@ -15,10 +15,4 @@ feature 'View question and answers', %q{
     expect(page).to have_content answer2.body
   end
 
-  scenario 'Any user can see details question view with no answers' do
-    visit question_path(question)
-    expect_page_to_have_question(question)
-    expect(page).to have_content 'No answers'
-  end
-
 end

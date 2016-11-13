@@ -4,6 +4,9 @@ hr
 
 .question-body
   p = @question.body
+.question-attachments
+  = render "attachments/show", obj: @question
+      /- if user_signed_in? && current_user.author_of?(@question)    
 .user_info
    Asked #{@question.created_at.strftime("%d %b. %Y")}
    br
@@ -17,7 +20,7 @@ hr
     = f.text_field :title
     br
     = f.text_area(:body, cols: 100, rows: 10)
-    br
+    = render 'attachments/edit', f: f
     = f.submit 'Save'
 br
 hr
@@ -28,7 +31,8 @@ hr
   p = form_for [@question, @question.answers.create], remote: true do |f|
     = f.label 'Add your answer'
     .answer-errors
-    = f.text_area(:body, cols: 80, rows: 7)
+    = f.text_area(:body, cols: 80, rows: 7) 
+    = render 'attachments/edit', f: f
     p
     = f.submit "Post Your Answer"
 - else
