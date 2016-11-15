@@ -1,11 +1,9 @@
 class Answer < ApplicationRecord
+  include Attachable
   belongs_to :user
   belongs_to :question
-  has_many :attachments, as: :attachable
 
   validates :body,:user_id, presence: true
-
-  accepts_nested_attributes_for :attachments, reject_if: :all_blank, allow_destroy: true
 
   default_scope { order(accepted: :desc) }
 
