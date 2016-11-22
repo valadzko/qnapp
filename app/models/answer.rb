@@ -1,7 +1,11 @@
 class Answer < ApplicationRecord
   include Attachable
+  #TODO : later - include Votable
   belongs_to :user
   belongs_to :question
+
+  has_many :ups, :class_name => 'User', :foreign_key => 'upvote_id'
+  has_many :downs, :class_name => 'User', :foreign_key => 'downvote_id'
 
   validates :body,:user_id, presence: true
 
