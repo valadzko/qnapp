@@ -5,6 +5,8 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers, shallow: true do
       get :accept, on: :member
+      get :upvote, on: :member
+      get :downvote, on: :member
     end
   end
   get '/attachments/:id', to: 'attachments#destroy', as: 'attachment'
