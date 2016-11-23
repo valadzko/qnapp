@@ -17,12 +17,42 @@ feature 'User vote for answer', %q{
     end
   end
 
-  scenario 'Authenticated user can vote up answer'
-  scenario 'Author can not vote up and vote down for his own answer'
-  scenario 'Authenticated user can down vote answer'
-  scenario 'User can vote up again and it cancel answer up vote'
-  scenario 'User can vote up again and it cancel answer up vote'
-  scenario 'Non authenticated user can not up vote answer'
-  scenario 'Non authenticated user can not down vote answer'
+  scenario 'Author can not vote up and vote down for his own answer' do
+    sign_in(user)
+    visit question_path(question)
+    within '.answers' do
+      expect(page).to_not have_link 'upvote'
+      expect(page).to_not have_link 'downvote'
+    end
+  end
 
+  scenario 'Non authenticated user can not vote' do
+    visit question_path(question)
+    within '.answers' do
+      expect(page).to_not have_link 'upvote'
+      expect(page).to_not have_link 'downvote'
+    end
+  end
+
+  scenario 'Authenticated user can vote up answer', js: true do
+    sign_in(create(:user))
+    visit question_path(question)
+    within '.answers' do
+      click_on 'upvote'
+      expect(page).to have_content 'Rating: 1'
+      click_on 'upvote'
+      expect(page).to have_content 'Rating: 0'
+    end
+  end
+
+  scenario 'Authenticated user can vote down answer', js: true do
+    sign_in(create(:user))
+    visit question_path(question)
+    within '.answers' do
+      click_on 'downvote'
+      expect(page).to have_content 'Rating: -1'
+      click_on 'downvote'
+      expect(page).to have_content 'Rating: 0'
+    end
+  end
 end
