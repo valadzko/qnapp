@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161126114428) do
+ActiveRecord::Schema.define(version: 20161123094219) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -73,23 +73,8 @@ ActiveRecord::Schema.define(version: 20161126114428) do
     t.index ["votable_type"], name: "index_votes_on_votable_type", using: :btree
   end
 
-  create_table "votings", force: :cascade do |t|
-    t.string   "votable_type"
-    t.integer  "votable_id"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
-    t.integer  "upvote_user_id"
-    t.integer  "downvote_user_id"
-    t.index ["downvote_user_id"], name: "index_votings_on_downvote_user_id", using: :btree
-    t.index ["upvote_user_id"], name: "index_votings_on_upvote_user_id", using: :btree
-    t.index ["votable_id"], name: "index_votings_on_votable_id", using: :btree
-    t.index ["votable_type"], name: "index_votings_on_votable_type", using: :btree
-  end
-
   add_foreign_key "answers", "questions"
   add_foreign_key "answers", "users"
   add_foreign_key "questions", "users"
   add_foreign_key "votes", "users"
-  add_foreign_key "votings", "users", column: "downvote_user_id"
-  add_foreign_key "votings", "users", column: "upvote_user_id"
 end
