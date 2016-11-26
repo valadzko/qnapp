@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161123094219) do
+ActiveRecord::Schema.define(version: 20161126114428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.integer  "user_id"
     t.boolean  "accepted",    default: false
     t.index ["question_id"], name: "index_answers_on_question_id", using: :btree
+    t.index ["user_id"], name: "index_answers_on_user_id", using: :btree
   end
 
   create_table "attachments", force: :cascade do |t|
@@ -31,8 +32,7 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.datetime "updated_at",      null: false
     t.integer  "attachable_id"
     t.string   "attachable_type"
-    t.index ["attachable_id"], name: "index_attachments_on_attachable_id", using: :btree
-    t.index ["attachable_type"], name: "index_attachments_on_attachable_type", using: :btree
+    t.index ["attachable_id", "attachable_type"], name: "index_attachments_on_attachable_id_and_attachable_type", using: :btree
   end
 
   create_table "questions", force: :cascade do |t|
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "user_id"
+    t.index ["user_id"], name: "index_questions_on_user_id", using: :btree
   end
 
   create_table "users", force: :cascade do |t|
@@ -56,33 +57,39 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.datetime "last_sign_in_at"
     t.inet     "current_sign_in_ip"
     t.inet     "last_sign_in_ip"
-    t.integer  "upvote_id"
-    t.integer  "downvote_id"
-    t.integer  "upvote_user_id"
-    t.integer  "downvote_user_id"
-    t.index ["downvote_id"], name: "index_users_on_downvote_id", using: :btree
-    t.index ["downvote_user_id"], name: "index_users_on_downvote_user_id", using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-    t.index ["upvote_id"], name: "index_users_on_upvote_id", using: :btree
-    t.index ["upvote_user_id"], name: "index_users_on_upvote_user_id", using: :btree
   end
 
   create_table "votes", force: :cascade do |t|
+    t.string   "votable_type"
+    t.integer  "votable_id"
+    t.integer  "user_id"
+    t.integer  "status",       default: 0
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["user_id"], name: "index_votes_on_user_id", using: :btree
+    t.index ["votable_id"], name: "index_votes_on_votable_id", using: :btree
+    t.index ["votable_type"], name: "index_votes_on_votable_type", using: :btree
+  end
+
+  create_table "votings", force: :cascade do |t|
     t.string   "votable_type"
     t.integer  "votable_id"
     t.datetime "created_at",       null: false
     t.datetime "updated_at",       null: false
     t.integer  "upvote_user_id"
     t.integer  "downvote_user_id"
-    t.index ["downvote_user_id"], name: "index_votes_on_downvote_user_id", using: :btree
-    t.index ["upvote_user_id"], name: "index_votes_on_upvote_user_id", using: :btree
-    t.index ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", using: :btree
+    t.index ["downvote_user_id"], name: "index_votings_on_downvote_user_id", using: :btree
+    t.index ["upvote_user_id"], name: "index_votings_on_upvote_user_id", using: :btree
+    t.index ["votable_id"], name: "index_votings_on_votable_id", using: :btree
+    t.index ["votable_type"], name: "index_votings_on_votable_type", using: :btree
   end
 
   add_foreign_key "answers", "questions"
-  add_foreign_key "users", "answers", column: "downvote_id"
-  add_foreign_key "users", "answers", column: "upvote_id"
-  add_foreign_key "votes", "users", column: "downvote_user_id"
-  add_foreign_key "votes", "users", column: "upvote_user_id"
+  add_foreign_key "answers", "users"
+  add_foreign_key "questions", "users"
+  add_foreign_key "votes", "users"
+  add_foreign_key "votings", "users", column: "downvote_user_id"
+  add_foreign_key "votings", "users", column: "upvote_user_id"
 end

@@ -25,15 +25,16 @@ RSpec.describe Answer, type: :model do
       expect(answer2).to be_accepted
     end
   end
-  
+
   context 'Validate voting for answer' do
     it 'increase rating of answer' do
       voting_user = create(:user)
       rating_before = answer.rating
       answer.upvote(voting_user)
       expect(answer.rating).to be (rating_before + 1)
+      # double vote up does nothing
       answer.upvote(voting_user)
-      expect(answer.rating).to be rating_before
+      expect(answer.rating).to be (rating_before + 1)
     end
 
     it 'decrease rating of answer' do
@@ -41,7 +42,17 @@ RSpec.describe Answer, type: :model do
       rating_before = answer.rating
       answer.downvote(voting_user)
       expect(answer.rating).to be (rating_before - 1)
+      # double vote down does nothing
       answer.downvote(voting_user)
+      expect(answer.rating).to be (rating_before - 1)
+    end
+
+    it 'cancel vote for answer' do
+      voting_user = create(:user)
+      rating_before = answer.rating
+      answer.upvote(voting_user)
+      expect(answer.rating).to be (rating_before + 1)
+      answer.reset_vote(voting_user)
       expect(answer.rating).to be rating_before
     end
   end
