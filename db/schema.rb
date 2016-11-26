@@ -68,6 +68,7 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.integer  "status",       default: 0
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
+    t.index ["status"], name: "index_votes_on_status", using: :btree
     t.index ["user_id"], name: "index_votes_on_user_id", using: :btree
     t.index ["votable_id"], name: "index_votes_on_votable_id", using: :btree
     t.index ["votable_type"], name: "index_votes_on_votable_type", using: :btree
