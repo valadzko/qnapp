@@ -25,8 +25,7 @@ class VotesController < ApplicationController
   end
 
   def find_vote_object
-    find_obj = "#{vote_params['type']}.where(id:#{vote_params['id']}).first"
-    @obj = eval(find_obj)
+    @obj = vote_params['type'].classify.constantize.find(vote_params['id'])
   end
 
   def must_not_be_author!

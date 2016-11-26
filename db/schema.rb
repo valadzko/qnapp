@@ -70,8 +70,7 @@ ActiveRecord::Schema.define(version: 20161123094219) do
     t.datetime "updated_at",               null: false
     t.index ["status"], name: "index_votes_on_status", using: :btree
     t.index ["user_id"], name: "index_votes_on_user_id", using: :btree
-    t.index ["votable_id"], name: "index_votes_on_votable_id", using: :btree
-    t.index ["votable_type"], name: "index_votes_on_votable_type", using: :btree
+    t.index ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", using: :btree
   end
 
   add_foreign_key "answers", "questions"

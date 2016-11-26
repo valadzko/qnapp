@@ -6,28 +6,26 @@ module Votable
   end
 
   def rating
-    votes.upvotes.count - votes.downvotes.count
+    votes.sum(:status)
   end
 
   def upvote(user)
-    vote(user, :upvote)
+    vote(user, 1)
   end
 
   def reset_vote(user)
-    vote(user, :default)
+    vote(user, 0)
   end
 
   def downvote(user)
-    vote(user, :downvote)
+    vote(user, -1)
   end
 
   private
 
-  def vote(user, status)
-    votes.where(
-      votable_type: self.class.name, votable_id: self.id, user_id: user.id
-    ).first_or_initialize.tap do |vote|
-      vote.update_attribute(:status, status)
+  def vote(user, value)
+    votes.where(user: user).first_or_initialize.tap do |vote|
+      vote.update_attribute(:status, value)
     end
   end
 end
