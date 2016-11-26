@@ -8,7 +8,6 @@
         p = link_to 'upvote', upvote_path(id: answer.id, type: answer.class.name), remote: true, class: 'vote-answer-link', data: { type: :json }
         p = link_to 'downvote', downvote_path(id: answer.id, type: answer.class.name), remote: true, class: 'vote-answer-link', data: { type: :json }
         p = link_to 'reset', resetvote_path(id: answer.id, type: answer.class.name), remote: true, class: 'vote-answer-link', data: { type: :json }
-        /p = link_to 'downvote',  downvote_answer_path(answer), remote: true, class: 'downvote-answer-link', data: { answer_id: answer.id, type: :json }
     .votecell
       - if user_signed_in? && current_user.author_of?(answer.question)  
         - if answer.accepted?

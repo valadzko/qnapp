@@ -2,6 +2,15 @@
   h2 = @question.title
 hr
 
+.question-errors
+
+.question-rating
+  p Rating: #{@question.rating}  
+- if user_signed_in? && !current_user.author_of?(@question)
+  p = link_to 'upvote', upvote_path(id: @question.id, type: @question.class.name), remote: true, class: 'vote-question-link', data: { type: :json }
+  p = link_to 'downvote', downvote_path(id: @question.id, type: @question.class.name), remote: true, class: 'vote-question-link', data: { type: :json }
+  p = link_to 'reset', resetvote_path(id: @question.id, type: @question.class.name), remote: true, class: 'vote-question-link', data: { type: :json }
+
 .question-body
   p = @question.body
 .question-attachments
