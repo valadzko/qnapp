@@ -22,6 +22,7 @@ feature 'User vote for answer', %q{
     visit question_path(question)
     within '.answers' do
       expect(page).to_not have_link 'upvote'
+      expect(page).to_not have_link 'reset'
       expect(page).to_not have_link 'downvote'
     end
   end
@@ -30,6 +31,7 @@ feature 'User vote for answer', %q{
     visit question_path(question)
     within '.answers' do
       expect(page).to_not have_link 'upvote'
+      expect(page).to_not have_link 'reset'
       expect(page).to_not have_link 'downvote'
     end
   end
@@ -40,7 +42,7 @@ feature 'User vote for answer', %q{
     within '.answers' do
       click_on 'upvote'
       expect(page).to have_content 'Rating: 1'
-      click_on 'upvote'
+      click_on 'reset'
       expect(page).to have_content 'Rating: 0'
     end
   end
@@ -51,7 +53,7 @@ feature 'User vote for answer', %q{
     within '.answers' do
       click_on 'downvote'
       expect(page).to have_content 'Rating: -1'
-      click_on 'downvote'
+      click_on 'reset'
       expect(page).to have_content 'Rating: 0'
     end
   end

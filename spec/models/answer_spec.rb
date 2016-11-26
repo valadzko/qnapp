@@ -27,33 +27,31 @@ RSpec.describe Answer, type: :model do
   end
 
   context 'Validate voting for answer' do
+    before(:each) do
+      @voting_user = create(:user)
+      @rating_before = answer.rating
+    end
     it 'increase rating of answer' do
-      voting_user = create(:user)
-      rating_before = answer.rating
-      answer.upvote(voting_user)
-      expect(answer.rating).to be (rating_before + 1)
+      answer.upvote(@voting_user)
+      expect(answer.rating).to be (@rating_before + 1)
       # double vote up does nothing
-      answer.upvote(voting_user)
-      expect(answer.rating).to be (rating_before + 1)
+      answer.upvote(@voting_user)
+      expect(answer.rating).to be (@rating_before + 1)
     end
 
     it 'decrease rating of answer' do
-      voting_user = create(:user)
-      rating_before = answer.rating
-      answer.downvote(voting_user)
-      expect(answer.rating).to be (rating_before - 1)
+      answer.downvote(@voting_user)
+      expect(answer.rating).to be (@rating_before - 1)
       # double vote down does nothing
-      answer.downvote(voting_user)
-      expect(answer.rating).to be (rating_before - 1)
+      answer.downvote(@voting_user)
+      expect(answer.rating).to be (@rating_before - 1)
     end
 
     it 'cancel vote for answer' do
-      voting_user = create(:user)
-      rating_before = answer.rating
-      answer.upvote(voting_user)
-      expect(answer.rating).to be (rating_before + 1)
-      answer.reset_vote(voting_user)
-      expect(answer.rating).to be rating_before
+      answer.upvote(@voting_user)
+      expect(answer.rating).to be (@rating_before + 1)
+      answer.reset_vote(@voting_user)
+      expect(answer.rating).to be @rating_before
     end
   end
 end

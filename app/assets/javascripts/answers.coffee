@@ -6,7 +6,7 @@ ready = ->
     $('form#edit-answer-' + answer_id).show()
     return
 
-  $('.upvote-answer-link,.downvote-answer-link').bind 'ajax:success', (e, data, status, xhr) ->
+  $('.vote-answer-link').bind 'ajax:success', (e, data, status, xhr) ->
     answer = $.parseJSON(xhr.responseText)
     $('#answer-'+ answer.id + ' .voting .errors').empty()
     $('#answer-'+ answer.id + ' .voting .rating').html('<p>Rating: ' + answer.rating+'</p>')
