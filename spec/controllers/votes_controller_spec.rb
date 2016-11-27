@@ -9,11 +9,11 @@ RSpec.describe VotesController, type: :controller do
     @answer = create(:answer, question: @question, user: @author)
   end
 
-  describe 'GET #upvote' do
+  describe 'POST #upvote' do
     context 'non author of the answer' do
       before do
         @expected_response_json = %({"id":"#{@answer.id}","rating":#{@answer.rating + 1}})
-        xhr :get, :upvote, id: @answer.id, type:'Answer', format: :json
+        xhr :post, :upvote, id: @answer.id, type:'Answer', format: :json
       end
       it 'assigns the requested obj to @obj' do
         expect(assigns(:obj)).to eq @answer
@@ -27,7 +27,7 @@ RSpec.describe VotesController, type: :controller do
       it 'can not change the rating of his answer' do
         sign_out(@user)
         sign_in(@author)
-        xhr :get, :upvote, id: @answer.id, type:'Answer', format: :json
+        xhr :post, :upvote, id: @answer.id, type:'Answer', format: :json
         @answer.reload
         expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
@@ -36,12 +36,12 @@ RSpec.describe VotesController, type: :controller do
     end
   end
 
-  describe 'GET #resetvote' do
+  describe 'DELETE #resetvote' do
     context 'non author of the answer' do
       before do
         @expected_response_json = %({"id":"#{@answer.id}","rating":#{@answer.rating}})
-        xhr :get, :upvote, id: @answer.id, type:'Answer', format: :json
-        xhr :get, :resetvote, id: @answer.id, type:'Answer', format: :json
+        xhr :post, :upvote, id: @answer.id, type:'Answer', format: :json
+        xhr :delete, :resetvote, id: @answer.id, type:'Answer', format: :json
       end
       it 'assigns the requested obj to @obj' do
         expect(assigns(:obj)).to eq @answer
@@ -55,7 +55,7 @@ RSpec.describe VotesController, type: :controller do
       it 'can not change the rating of his answer' do
         sign_out(@user)
         sign_in(@author)
-        xhr :get, :resetvote, id: @answer.id, type:'Answer', format: :json
+        xhr :delete, :resetvote, id: @answer.id, type:'Answer', format: :json
         @answer.reload
         expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
@@ -68,7 +68,7 @@ RSpec.describe VotesController, type: :controller do
     context 'non author of the answer' do
       before do
         @expected_response_json = %({"id":"#{@answer.id}","rating":#{@answer.rating - 1}})
-        xhr :get, :downvote, id: @answer.id, type:'Answer', format: :json
+        xhr :post, :downvote, id: @answer.id, type:'Answer', format: :json
       end
       it 'assigns the requested object to @obj' do
         expect(assigns(:obj)).to eq @answer
@@ -82,7 +82,7 @@ RSpec.describe VotesController, type: :controller do
       it 'can not change the rating of his answer' do
         sign_out(@user)
         sign_in(@author)
-        xhr :get, :downvote, id: @answer.id, type:'Answer', format: :json
+        xhr :post, :downvote, id: @answer.id, type:'Answer', format: :json
         @answer.reload
         expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
@@ -90,5 +90,4 @@ RSpec.describe VotesController, type: :controller do
       end
     end
   end
-
 end

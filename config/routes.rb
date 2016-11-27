@@ -5,10 +5,16 @@ Rails.application.routes.draw do
   resources :questions do
     resources :answers, shallow: true do
       get :accept, on: :member
-      resources :attachments, only: [:destroy]
     end
   end
-  get '/votes/:id/:type/upvote', to: 'votes#upvote', as: 'upvote'
-  get '/votes/:id/:type/downvote', to: 'votes#downvote', as: 'downvote'
-  get '/votes/:id/:type/resetvote', to: 'votes#resetvote', as: 'resetvote'
+
+  resources :votes, only: [] do
+    collection do
+      post :upvote
+      post :downvote
+      delete :resetvote
+    end
+  end
+
+  resources :attachments, only: [:destroy]
 end
