@@ -5,9 +5,9 @@
       .rating
         p Rating: #{answer.rating}
       - if user_signed_in? && !current_user.author_of?(answer)
-        p = link_to 'upvote', upvote_votes_path(id: answer.id, type: answer.class.name), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
-        p = link_to 'downvote', downvote_votes_path(id: answer.id, type: answer.class.name), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
-        p = link_to 'reset', resetvote_votes_path(id: answer.id, type: answer.class.name), method: :delete, remote: true, class: 'vote-answer-link', data: { type: :json }
+        p = link_to 'upvote', upvote_answer_vote_path(answer), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
+        p = link_to 'downvote', downvote_answer_vote_path(answer), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
+        p = link_to 'reset', resetvote_answer_vote_path(answer), method: :delete, remote: true, class: 'vote-answer-link', data: { type: :json }
     .votecell
       - if user_signed_in? && current_user.author_of?(answer.question)  
         - if answer.accepted?
