@@ -20,12 +20,12 @@ class VotesController < ApplicationController
 
   private
 
-  def vote_params
-    params.permit(:id, :type)
-  end
-
   def find_vote_object
-    @obj = vote_params['type'].classify.constantize.find(vote_params['id'])
+    params.each do |name, value|
+      if name =~ /(.+)_id$/
+        @obj = $1.classify.constantize.find(value)
+      end
+    end
   end
 
   def must_not_be_author!
