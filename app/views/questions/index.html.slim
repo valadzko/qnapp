@@ -1,4 +1,3 @@
 h1 All questions
-- @questions.each do |q|
-  ul
-    li = link_to q.title, q
+- @questions.latest.each do |q|
+  = render "questions/compact_view", q: q

@@ -39,6 +39,8 @@ gem 'devise'
 gem 'carrierwave'
 gem 'remotipart'
 gem "cocoon"
+gem 'therubyracer'
+gem 'twitter-bootstrap-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -47,12 +49,14 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'database_cleaner'
   gem 'capybara-webkit'
+  gem 'json_spec'
 end
 
 group :test do
   gem 'shoulda-matchers', '~> 3.1', require: false
   gem 'capybara'
   gem 'launchy'
+  gem 'nyan-cat-formatter'
 end
 
 group :development do
