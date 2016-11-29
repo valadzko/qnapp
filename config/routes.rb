@@ -13,10 +13,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :questions do
-    concerns :votable
-    resources :answers, shallow: true do
-      concerns :votable
+  resources :questions, conserns: [:votable] do
+    resources :answers, conserns: [:votable], shallow: true do
       get :accept, on: :member
     end
   end
