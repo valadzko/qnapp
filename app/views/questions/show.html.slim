@@ -32,6 +32,9 @@ hr
     = render 'attachments/edit', f: f
     = f.submit 'Save'
 br
+.question-comments
+  = render "comments/index", commentable: @question
+br
 hr
 .answers
   = render 'answers/answers'
