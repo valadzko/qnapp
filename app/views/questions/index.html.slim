@@ -1,3 +1,4 @@
 h1 All questions
-- @questions.latest.each do |q|
-  = render "questions/compact_view", q: q
+.compact-questions-list
+  - @questions.latest.each do |q|
+    = render "questions/compact_view", q: q
