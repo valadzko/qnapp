@@ -1,8 +1,9 @@
 .question-compact-view
   .minicounts
-    span 0
-  .div
-    votes
-  .question-link
-    li = link_to q.title, q
-  hr
+    /TODO move to css file
+    p.rating-count style="float: left;border-bottom: 2px solid red;width: 60px;padding: 10px;display: inline-block;text-align: center;box-sizing: border-box;" = q.rating
+    p.answers-count style="float: left;border-bottom: 2px solid green;width: 60px;padding: 10px;text-align: center; box-sizing: border-box;" = q.answers.count
+  .question-link style="float: left;width: auto;padding: 10px;box-sizing: border-box;font-size: 120%;" = link_to q.title, q
+br
+br
+hr
