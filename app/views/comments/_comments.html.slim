@@ -1,0 +1,4 @@
+- if comments.any?
+  | Comments:
+  - comments.each do |comment|
+    = render "comments/comment", comment: comment

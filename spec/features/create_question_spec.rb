@@ -28,7 +28,7 @@ feature 'Create question', %q{
     end
   end
 
-  xcontext "miltiple sessions" do
+  context "miltiple sessions" do
     scenario 'new question appears in another user session' do
       Capybara.using_session('user') do
         sign_in user

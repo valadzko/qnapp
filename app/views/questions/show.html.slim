@@ -33,7 +33,14 @@ hr
     = f.submit 'Save'
 br
 .question-comments
-  = render "comments/index", commentable: @question
+  - if @question.comments.any?
+    = render "comments/comments", comments: @question.comments
+- if user_signed_in?
+  p = link_to 'add comment', '', class: 'add-comment-link'
+  .comment-errors
+  p = form_for [@question, @question.comments.create], html: {remote: true, data: { type: :json }, class:'add-comment-form'} do |f|
+    = f.text_field :content 
+    = f.submit "Add comment"  
 br
 hr
 .answers

@@ -4,13 +4,25 @@ class CommentsController < ApplicationController
 
   def index
     @comments = @commentable.comments
+    respond_to do |format|
+      format.json { render json: {commentable_id: @commentable.id, comments: @comments } }
+    end
   end
 
   def create
+    #todo can be created with issues
     @comment = @commentable.comments.create(comments_params.merge(user: current_user))
+    respond_to do |format|
+      format.json { render json: {commentable_id: @commentable.id, comment: @comment } }
+    end
   end
 
   private
+
+  def comments_params
+    puts "PAVEL YOUR PARAMS ARE: #{params.inspect}"
+    params.require(:comment).permit(:content)
+  end
 
   def find_commentable
     params.each do |name, value|

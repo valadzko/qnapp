@@ -1,6 +1,0 @@
-- if commentable.comments.any?
-  | Comments:
-  - commentable.comments.each do |comment|
-    = render "comments/comment", comment: comment
-- if user_signed_in?
-  = link_to 'add comment', '#'
