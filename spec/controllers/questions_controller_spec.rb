@@ -17,7 +17,7 @@ RSpec.describe QuestionsController, type: :controller do
   end
 
   describe 'GET #show' do
-    before { get :show, id: question }
+    before { get :show, params: { id: question } }
 
     it 'assign the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -35,27 +35,27 @@ RSpec.describe QuestionsController, type: :controller do
       sign_in_user
       context 'with valid attributes' do
         it 'saves new question in database ' do
-          expect { post :create, question: attributes_for(:question) }.to change(Question, :count).by(1)
+          expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
         end
 
         it 'redirects to show view' do
-          post :create, question: attributes_for(:question)
+          post :create, params: { question: attributes_for(:question) }
           expect(response).to redirect_to question_path(assigns(:question))
         end
 
         it 'associates new answer with current user' do
-          post :create, question: attributes_for(:question)
+          post :create, params: { question: attributes_for(:question) }
           expect(assigns(:question).user).to eq subject.current_user
         end
       end
 
       context 'with invalid attributes' do
         it 'does not save the question' do
-          expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+          expect { post :create, params: { question: attributes_for(:invalid_question)} }.to_not change(Question, :count)
         end
 
         it 're-renders new view' do
-          post :create, question: attributes_for(:invalid_question)
+          post :create, params: { question: attributes_for(:invalid_question) }
           expect(response).to render_template :new
         end
       end
@@ -83,19 +83,19 @@ RSpec.describe QuestionsController, type: :controller do
     sign_in_user
     context 'with valid attributes' do
       it 'assings the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question), format: :js
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(assigns(:question)).to eq question
       end
 
       it 'changes question attributes' do
-        patch :update, id: question, question: { title: 'new title', body: 'my new long valid body' }, format: :js
+        patch :update, params: { id: question, question: { title: 'new title', body: 'my new long valid body' }, format: :js }
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'my new long valid body'
       end
 
       it 'render template update' do
-        patch :update, id: question, question: attributes_for(:question), format: :js
+        patch :update, params: { id: question, question: attributes_for(:question), format: :js }
         expect(response).to render_template :update
       end
     end
@@ -106,7 +106,7 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question attributes' do
         title_before_try = question.title
         body_before_try = question.body
-        patch :update, id: question, question: { title: 'new title', body: nil }, format: :js
+        patch :update, params: { id: question, question: { title: 'new title', body: nil }, format: :js }
         question.reload
         expect(question.title).to eq title_before_try
         expect(question.body).to eq body_before_try
@@ -122,10 +122,10 @@ RSpec.describe QuestionsController, type: :controller do
           @question = create(:question, user: author)
         end
         it 'delete question' do
-          expect{delete :destroy, id: @question}.to change(Question, :count).by(-1)
+          expect{delete :destroy, params: { id: @question} }.to change(Question, :count).by(-1)
         end
         it 'redirects to questions view' do
-          delete :destroy, id: @question
+          delete :destroy, params: { id: @question }
           expect(response).to redirect_to questions_path
         end
     end
@@ -139,10 +139,10 @@ RSpec.describe QuestionsController, type: :controller do
       end
 
       it 'does not delete question' do
-        expect{ delete :destroy, id: @question }.to_not change(Question, :count)
+        expect{ delete :destroy, params: { id: @question } }.to_not change(Question, :count)
       end
       it 'should redirect to questions' do
-        delete :destroy, id: @question
+        delete :destroy, params: { id: @question }
         expect(response).to redirect_to questions_path
       end
     end

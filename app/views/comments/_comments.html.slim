@@ -1,4 +1,12 @@
-- if comments.any?
-  | Comments:
-  - comments.each do |comment|
-    = render "comments/comment", comment: comment
+.comments commentable_type="#{commentable.class}" commentable_id="#{commentable.id}"
+  - if commentable.comments.any?
+    | Comments:
+    = render commentable.comments 
+  - else 
+    | No comments
+  .add-comment-form
+    - if user_signed_in?
+      p = form_for [commentable, commentable.comments.create], html: {remote: true, data: { type: :json }} do |f|
+        = f.text_field :content
+        .comment-errors
+        = f.submit "Add comment"

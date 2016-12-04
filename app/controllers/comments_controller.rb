@@ -20,7 +20,6 @@ class CommentsController < ApplicationController
   private
 
   def comments_params
-    puts "PAVEL YOUR PARAMS ARE: #{params.inspect}"
     params.require(:comment).permit(:content)
   end
 

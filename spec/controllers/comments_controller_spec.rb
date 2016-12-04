@@ -9,7 +9,7 @@ RSpec.describe CommentsController, type: :controller do
 
     before do
       @expected_response = %({"commentable_id":#{question.id},"comments":#{comments.to_json}})
-      xhr :get, :index, question_id: question.id, format: :json
+      get :index, xhr: true, params: { question_id: question.id, format: :json }
     end
     it 'populates array of comments for given question' do
       expect(assigns(:comments)).to match_array(comments)
@@ -26,10 +26,10 @@ RSpec.describe CommentsController, type: :controller do
     context 'with valid attributes' do
       before do
         sign_in user
-        post :create, question_id: question.id, comment: attributes_for(:comment), format: :json
+        post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :json }
       end
       it 'saves new comment to database' do
-        expect{ post :create, question_id: question.id, comment: attributes_for(:comment)}.to change(Comment, :count).by(1)
+        expect{ post :create, params: {question_id: question.id, comment: attributes_for(:comment)}}.to change(Comment, :count).by(1)
       end
       it 'associate new comment with commentable(question)' do
         expect(assigns(:comment).commentable).to eq question
@@ -38,7 +38,7 @@ RSpec.describe CommentsController, type: :controller do
         expect(assigns(:comment).user).to eq user
       end
       xit 'respond with comment json' do
-        post :create, question_id: question.id, comment: attributes_for(:comment), format: :json
+        post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :json }
         expected_response = %({"commentable_id":#{question.id},"comment":#{attributes_for(:comment).to_json}})
         expect(response.body).to be_json_eql(expected_response)
       end

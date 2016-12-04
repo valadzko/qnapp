@@ -8,7 +8,7 @@ feature 'Create question', %q{
 
   given(:user) { create(:user) }
 
-  context 'first' do
+  context 'single session' do
     scenario 'Authenticated user creates question' do
       sign_in user
 
@@ -29,7 +29,7 @@ feature 'Create question', %q{
   end
 
   context "miltiple sessions" do
-    scenario 'new question appears in another user session' do
+    scenario 'new question appears in another user session', js: true do
       Capybara.using_session('user') do
         sign_in user
         visit questions_path

@@ -18,12 +18,9 @@
         = image_tag 'accepted', size: "40x40", class: "accepted-icon"
     br
     .answer-body = answer.body
-    .answer-attachements
-      = render "attachments/show", obj: answer
-    .user_info
-       Answered #{answer.created_at.strftime("%d %b. %Y")}
-       br
-       by #{answer.user.email}
+    = render "attachments/show", obj: answer
+    = render "layouts/user_info", obj: answer
+    
     - if user_signed_in? && current_user.author_of?(answer)
       p = link_to 'delete', answer, class: 'delete-answer-link',
         method: :delete, remote: true, data: { confirm: "This will delete your answer #{answer.id}. Continue?" }
