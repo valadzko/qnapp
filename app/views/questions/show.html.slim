@@ -19,7 +19,7 @@ hr
   p = link_to 'delete', @question, class: 'delete-question-link', :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
   p = link_to 'edit', '', class: 'edit-question-link'
   .question-errors
-  p = form_for @question, remote: true, class:'edit-question' do |f|
+  p = form_for @question, remote: true, class:'edit_question' do |f|
     br
     = f.text_field :title
     br

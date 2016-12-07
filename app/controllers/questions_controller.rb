@@ -58,6 +58,7 @@ class QuestionsController < ApplicationController
 
   def find_question
     @question = Question.find(params[:id])
+    gon.question_id = @question.id
   end
 
   def question_params

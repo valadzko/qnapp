@@ -15,6 +15,7 @@
 //= require jquery.remotipart
 //= require jquery_ujs
 //= require twitter/bootstrap
+//= require skim
 //= require cocoon
 //= require turbolinks
 //= require bootstrap-sprockets

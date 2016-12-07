@@ -1,0 +1,30 @@
+.answer id="answer-#{@answer.id}"
+  .voting
+    .errors
+    .rating
+      p Rating: #{@answer.rating}
+    - if gon.user_id && (@answer.user.id != gon.user_id)
+      p
+        a class="vote-answer-link" data-method="post" data-remote="true" data-type="json" href="/answers/#{@answer.id}/votes/upvote" rel="nofollow"  upvote
+      p
+        a class="vote-answer-link" data-method="post" data-remote="true" data-type="json" href="/answers/#{@answer.id}/votes/downvote" rel="nofollow"  downvote
+      p
+        a class="vote-answer-link" data-method="delete" data-remote="true" data-type="json" href="/answers/#{@answer.id}/votes/resetvote" rel="nofollow"  reset
+  .votecell
+    - if gon.user_id && (gon.question_author_id == gon.user_id)
+      - if @answer.accepted
+        a.accepted-link data-remote="true" href="/answers/#{@answer.id}/accept" 
+          img.accept-icon alt="Accept" height="40" src="/assets/accept.png" width="40" /
+      - else
+        a.accepted-link data-remote="true" href="/answers/#{@answer.id}/accept" 
+          img.accept-icon alt="Accepted" height="40" src="/assets/accepted.png" width="40" /
+    - else
+      - if @answer.accepted
+        img.accept-icon alt="Accepted" height="40" src="/assets/accepted.png" width="40"
+  br
+  .answer-body = @answer.body
+  hr
+  .user_info
+    = "Created #{@answer.created_at}"
+    br>/
+    = "by #{@answer.user.email}"

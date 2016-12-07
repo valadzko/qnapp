@@ -20,7 +20,6 @@ $(document).on "turbolinks:load", ->
     connected: ->
       @perform 'follow'
     ,
-
     received: (data) ->
       $('.compact-questions-list').prepend(data)
   })

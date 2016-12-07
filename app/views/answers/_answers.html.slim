@@ -2,8 +2,8 @@
   - unless @question.answers.empty?
     h3 id="answers-label" Answers:
     = render @question.answers
-  - else 
-    | No answers so far
+  - else
+    h3 id="answers-label" No answers so far
   .add-answer-form  
     - if user_signed_in?
       p = form_for [@question, @question.answers.create], remote: true do |f|

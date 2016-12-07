@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update]
   before_action :find_answer, only: [:destroy, :update, :accept]
   before_action :must_be_author!, only: [:destroy, :update, :accept]
+  after_action :publish_answer, only: [:create]
 
   def create
     @question = Question.find(params[:question_id])
@@ -27,6 +28,23 @@ class AnswersController < ApplicationController
     unless current_user.author_of?(@answer)
       redirect_to @answer.question, error: "You can delete only your answer"
     end
+  end
+
+  def publish_answer
+    return if @answer.errors.any?
+    ActionCable.server.broadcast(
+      "question-#{@answer.question.id}-answers",
+      rendering_params
+    )
+  end
+
+  def rendering_params
+    gon.question_author_id = @answer.question.user_id
+    return @answer.as_json.merge(
+      rating: @answer.rating,
+      user: @answer.user.to_json,
+      attachments: @answer.attachments.to_json,
+    ).to_json
   end
 
   def answer_params
