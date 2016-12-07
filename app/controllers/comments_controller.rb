@@ -1,20 +1,18 @@
 class CommentsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
-  before_action :find_commentable
+  before_action :find_commentable, except: [:destroy]
+  before_action :find_comment, only: [:destroy]
 
   def index
     @comments = @commentable.comments
-    respond_to do |format|
-      format.json { render json: {commentable_id: @commentable.id, comments: @comments } }
-    end
   end
 
   def create
-    #todo can be created with issues
     @comment = @commentable.comments.create(comments_params.merge(user: current_user))
-    respond_to do |format|
-      format.json { render json: {commentable_id: @commentable.id, comment: @comment } }
-    end
+  end
+
+  def destroy
+    @comment.destroy
   end
 
   private
@@ -31,4 +29,7 @@ class CommentsController < ApplicationController
     end
   end
 
+  def find_comment
+    @comment = Comment.find(params[:id])
+  end
 end

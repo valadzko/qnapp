@@ -1,4 +1,7 @@
 .comment id=comment.id
   .content #{comment.content}
   .author from: #{comment.user.email}
+  - if user_signed_in? && current_user.author_of?(comment)
+    p = link_to 'delete', comment, class: 'delete-comment-link',
+      method: :delete, remote: true, data: { confirm: "This will delete your comment. Continue?" }
   hr
