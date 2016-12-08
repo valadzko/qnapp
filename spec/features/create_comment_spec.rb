@@ -16,4 +16,25 @@ feature 'Create Comment for question', %q{
     click_on 'Add comment'
     expect(page).to have_content 'My comment message'
   end
+
+  scenario 'User can see new comment in different session', js: true do
+    Capybara.using_session('user') do
+      sign_in create(:user)
+      visit question_path(question)
+    end
+
+    Capybara.using_session('guest') do
+      visit question_path(question)
+    end
+
+    Capybara.using_session('user') do
+      fill_in 'comment_content', with: 'My comment message'
+      click_on 'Add comment'
+      expect(page).to have_content 'My comment message'
+    end
+
+    Capybara.using_session('guest') do
+      expect(page).to have_content 'My comment message'
+    end
+  end
 end
