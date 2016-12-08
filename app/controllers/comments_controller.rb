@@ -2,6 +2,7 @@ class CommentsController < ApplicationController
   before_action :authenticate_user!, except: [:index]
   before_action :find_commentable, except: [:destroy]
   before_action :find_comment, only: [:destroy]
+  after_action :publish_comment, only: [:create]
 
   def index
     @comments = @commentable.comments
@@ -19,6 +20,20 @@ class CommentsController < ApplicationController
 
   def comments_params
     params.require(:comment).permit(:content)
+  end
+
+  def publish_comment
+    return if @comment.errors.any?
+    ActionCable.server.broadcast( channel_name, rendering_params )
+  end
+
+  def channel_name
+    id = @commentable.class == Question ? @commentable.id : @commentable.question.id
+    "comments-for-question-page-#{id}"
+  end
+
+  def rendering_params
+    @comment.as_json.merge(user_email: @comment.user.email).to_json
   end
 
   def find_commentable
