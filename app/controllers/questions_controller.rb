@@ -5,7 +5,7 @@ class QuestionsController < ApplicationController
   before_action :must_be_author!, only: [:destroy]
   after_action :publish_question, only: [:create]
 
-  respond_to :html
+  #respond_to :json, only: :create
 
   def index
     respond_with( @questions = Question.all )
