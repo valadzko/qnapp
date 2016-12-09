@@ -30,4 +30,27 @@ feature 'Create Answer on question', %q{
     visit question_path(question)
     expect(page).to_not have_link 'Post Your Answer'
   end
+
+  scenario 'new answer appears in another user session', js: true do
+    Capybara.using_session('user') do
+      sign_in create(:user)
+      visit question_path(question)
+    end
+
+    Capybara.using_session('guest') do
+      visit question_path(question)
+    end
+
+    Capybara.using_session('user') do
+      fill_in 'answer_body', with: 'The answer text which is worth to type'
+      click_on 'Post Your Answer'
+      within '.answers' do
+        expect(page).to have_content 'The answer text which is worth to type'
+      end
+    end
+
+    Capybara.using_session('guest') do
+      expect(page).to have_content 'The answer text which is worth to type'
+    end
+  end
 end

@@ -1,3 +1,10 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
+  protect_from_forgery with: :exception unless Rails.env.test?
+  before_action :gon_user, unless: :devise_controller?
+
+  private
+
+  def gon_user
+    gon.user_id = current_user.id if current_user
+  end
 end

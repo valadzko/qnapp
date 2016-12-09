@@ -1,0 +1,10 @@
+<% if @comment.errors.present? %>
+  <% @comment.errors.full_messages.each do |message| %>
+    $('.comment-errors').html('<%= j message %>');
+  <% end %>
+  <% else %>
+    if ($('.comment#<%= @comment.id %>').parent().children().length == 3){
+      $('.comment#<%= @comment.id %>').parent().children(".comments-label").html("No comments");
+    }
+    $('.comment#<%= @comment.id %>').remove();
+  <% end %>

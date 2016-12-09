@@ -1,0 +1,12 @@
+.comments commentable_type="#{commentable.class}" commentable_id="#{commentable.id}"
+  - if commentable.comments.any?
+    .comments-label Comments:
+    = render commentable.comments 
+  - else 
+    .comments-label No comments
+  .add-comment-form
+    - if user_signed_in?
+      p = form_for [commentable, commentable.comments.create], remote: true do |f|
+        = f.text_field :content, label: 'comment_body'
+        .comment-errors
+        = f.submit "Add comment"

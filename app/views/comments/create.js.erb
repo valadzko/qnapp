@@ -1,0 +1,12 @@
+<% if @comment.errors.present? %>
+  <% @comment.errors.full_messages.each do |message| %>
+    $('.comment-errors').html('<%= j message %>');
+  <% end %>
+<% else %>
+  var comments_section = $('.comments[commentable_id="<%= @commentable.id %>"][commentable_type="<%= @commentable.class %>"]');
+  if (comments_section.children().length == 2){
+    comments_section.children('.comments-label').html("Comments:");
+  }
+  comments_section.children('.add-comment-form').prepend('<%= j render @comment %>');
+  comments_section.find("input#comment_content").val('');
+<% end %>

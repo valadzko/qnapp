@@ -7,6 +7,7 @@ $(document).on "turbolinks:load", ->
     $(this).hide()
     $('.edit_question').show()
     return
+
   $('.vote-question-link').bind 'ajax:success', (e, data, status, xhr) ->
     question = $.parseJSON(xhr.responseText)
     $('.question-errors').empty()
@@ -14,3 +15,11 @@ $(document).on "turbolinks:load", ->
   .bind 'ajax:error', (e, xhr, status, error) ->
     response = $.parseJSON(xhr.responseText)
     $('.question-errors').html(response.errors)
+
+  App.cable.subscriptions.create('QuestionsChannel',{
+    connected: ->
+      @perform 'follow'
+    ,
+    received: (data) ->
+      $('.compact-questions-list').prepend(data)
+  })

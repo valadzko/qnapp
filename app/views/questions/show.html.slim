@@ -13,18 +13,13 @@ hr
 
 .question-body
   p = @question.body
-.question-attachments
-  = render "attachments/show", obj: @question
-      /- if user_signed_in? && current_user.author_of?(@question)    
-.user_info
-   Asked #{@question.created_at.strftime("%d %b. %Y")}
-   br
-   by #{@question.user.email}
+= render "attachments/show", obj: @question
+= render "layouts/user_info", obj: @question
 - if user_signed_in? && current_user.author_of?(@question)  
   p = link_to 'delete', @question, class: 'delete-question-link', :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
   p = link_to 'edit', '', class: 'edit-question-link'
   .question-errors
-  p = form_for @question, remote: true, class:'edit-question' do |f|
+  p = form_for @question, remote: true, class:'edit_question' do |f|
     br
     = f.text_field :title
     br
@@ -32,17 +27,7 @@ hr
     = render 'attachments/edit', f: f
     = f.submit 'Save'
 br
+= render "comments/comments", commentable: @question
+br
 hr
-.answers
-  = render 'answers/answers'
-
-- if user_signed_in?
-  p = form_for [@question, @question.answers.create], remote: true do |f|
-    = f.label 'Add your answer'
-    .answer-errors
-    = f.text_area(:body, cols: 80, rows: 7) 
-    = render 'attachments/edit', f: f
-    p
-    = f.submit "Post Your Answer"
-- else
-  h4 You need to login to answer the question
+= render 'answers/answers'

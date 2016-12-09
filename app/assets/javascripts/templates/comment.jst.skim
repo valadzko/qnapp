@@ -1,0 +1,4 @@
+.comment id="#{@comment.id}"
+  .content = @comment.content
+  .author = "from: #{@comment.user_email}"
+  hr

@@ -6,21 +6,51 @@ feature 'Create question', %q{
   I want to be able to ask questions
 } do
 
-  scenario 'Authenticated user creates question' do
-    sign_in create(:user)
+  given(:user) { create(:user) }
 
-    visit questions_path
-    click_on 'Ask question'
-    fill_in 'question_title', with: 'Test question title'
-    fill_in 'question_body', with: 'Question test body'
-    click_on 'Post Your Question'
-    expect(page).to have_content 'Test question title'
-    expect(page).to have_content 'Question test body'
+  context 'single session' do
+    scenario 'Authenticated user creates question' do
+      sign_in user
+
+      visit questions_path
+      click_on 'Ask question'
+      fill_in 'question_title', with: 'Test question title'
+      fill_in 'question_body', with: 'Question test body'
+      click_on 'Post Your Question'
+      expect(page).to have_content 'Test question title'
+      expect(page).to have_content 'Question test body'
+    end
+
+    scenario 'Non-authenticated user tries to create question' do
+      visit questions_path
+      click_on 'Ask question'
+      expect(page).to have_content 'You need to sign in or sign up before continuing.'
+    end
   end
 
-  scenario 'Non-authenticated user tries to create question' do
-    visit questions_path
-    click_on 'Ask question'
-    expect(page).to have_content 'You need to sign in or sign up before continuing.'
+  context "miltiple sessions" do
+    scenario 'new question appears in another user session', js: true do
+      Capybara.using_session('user') do
+        sign_in user
+        visit questions_path
+      end
+
+      Capybara.using_session('guest') do
+        visit questions_path
+      end
+
+      Capybara.using_session('user') do
+        click_on 'Ask question'
+        fill_in 'question_title', with: 'Test question title'
+        fill_in 'question_body', with: 'Question test body'
+        click_on 'Post Your Question'
+        expect(page).to have_content 'Test question title'
+        expect(page).to have_content 'Question test body'
+      end
+
+      Capybara.using_session('guest') do
+        expect(page).to have_content 'Test question title'
+      end
+    end
   end
 end

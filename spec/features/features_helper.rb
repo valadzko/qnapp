@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.configure do |config|
 
+  Capybara.server = :puma
   Capybara.javascript_driver = :webkit
 
   config.use_transactional_fixtures = false
@@ -21,6 +22,7 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
   config.after(:each) do
+    Capybara.reset_sessions!
     DatabaseCleaner.clean
   end
 end

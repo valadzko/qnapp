@@ -1,3 +1,17 @@
-- unless @question.answers.empty?
-  h3 id="answers-label" Answers:
-  = render @question.answers
+.answers
+  - unless @question.answers.empty?
+    h3 id="answers-label" Answers:
+    = render @question.answers
+  - else
+    h3 id="answers-label" No answers so far
+  .add-answer-form  
+    - if user_signed_in?
+      p = form_for [@question, @question.answers.create], remote: true do |f|
+        = f.label 'Add your answer'
+        .answer-errors
+        = f.text_area(:body, cols: 80, rows: 7) 
+        = render 'attachments/edit', f: f
+        p
+        = f.submit "Post Your Answer"
+    - else
+      h4 You need to login to answer the question
