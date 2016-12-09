@@ -1,40 +1,41 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :find_question, only: [:show, :update, :destroy]
+  before_action :find_question, only: [:show, :edit, :update, :destroy]
+  before_action :build_answer, only: [:show]
   before_action :must_be_author!, only: [:destroy]
   after_action :publish_question, only: [:create]
 
+  respond_to :html
+
   def index
-    @questions = Question.all
+    respond_with( @questions = Question.all )
   end
 
   def show
-    @answer = @question.answers.build
     @answer.attachments.build
+    respond_with @question
+  end
+
+  def edit
   end
 
   def new
     @question = Question.new
     @question.attachments.build
+    respond_with @question
   end
 
   def create
-    @question = Question.new(question_params)
-    @question.user = current_user
-    if @question.save
-      redirect_to @question
-    else
-      render :new
-    end
+    respond_with(@question = Question.create(question_params.merge(user: current_user)))
   end
 
   def update
     @question.update(question_params)
+    respond_with @question
   end
 
   def destroy
-    @question.destroy
-    redirect_to questions_path
+    respond_with(@question.destroy)
   end
 
   private
@@ -54,6 +55,10 @@ class QuestionsController < ApplicationController
         locals: { q: @question }
       )
     )
+  end
+
+  def build_answer
+    @answer = @question.answers.build
   end
 
   def find_question
