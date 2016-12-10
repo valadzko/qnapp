@@ -1,0 +1,11 @@
+h3 Edit question
+
+= form_for @question do |f|
+  p
+    = f.label :title
+    = f.text_field :title
+  p
+    = f.label :body
+    = f.text_area :body
+  
+  p= f.submit 'Save'

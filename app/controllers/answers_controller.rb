@@ -1,25 +1,28 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update]
   before_action :find_answer, only: [:destroy, :update, :accept]
+  before_action :find_question, only: :create
   before_action :must_be_author!, only: [:destroy, :update, :accept]
   after_action :publish_answer, only: [:create]
 
+  respond_to :js
+  respond_to :json, only: :create
+
   def create
-    @question = Question.find(params[:question_id])
-    @answer = @question.answers.create(answer_params.merge(user: current_user))
+    respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
   end
 
   def accept
-    @question = @answer.question
     @answer.mark_as_accepted
   end
 
   def destroy
-    @answer.destroy
+    respond_with(@answer.destroy)
   end
 
   def update
     @answer.update(answer_params)
+    respond_with @answer
   end
 
   private
@@ -51,7 +54,12 @@ class AnswersController < ApplicationController
     params.require(:answer).permit(:body, attachments_attributes: [:file, :id, :_destroy])
   end
 
+  def find_question
+    @question = @answer.nil? ? Question.find(params[:question_id]) : @answer.question
+  end
+
   def find_answer
     @answer = Answer.find(params[:id])
+    find_question
   end
 end

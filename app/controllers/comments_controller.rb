@@ -4,16 +4,18 @@ class CommentsController < ApplicationController
   before_action :find_comment, only: [:destroy]
   after_action :publish_comment, only: [:create]
 
+  respond_to :js
+
   def index
-    @comments = @commentable.comments
+    respond_with(@comments = @commentable.comments)
   end
 
   def create
-    @comment = @commentable.comments.create(comments_params.merge(user: current_user))
+    respond_with(@comment = @commentable.comments.create(comments_params.merge(user: current_user)))
   end
 
   def destroy
-    @comment.destroy
+    respond_with(@comment.destroy)
   end
 
   private
