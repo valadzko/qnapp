@@ -2,8 +2,11 @@ class AttachmentsController < ApplicationController
   before_action :find_attachment, only: [:destroy]
   before_action :must_be_author!, only: [:destroy]
 
+  respond_to :json
+  respond_to :js
+
   def destroy
-    @attachment.destroy
+    respond_with(@attachment.destroy)
   end
 
   private
