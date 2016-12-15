@@ -23,6 +23,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :users, only: [] do
+    collection do
+      post 'require_email_for_auth'
+    end
+  end
+
   resources :attachments, only: [:destroy]
 
   mount ActionCable.server => '/cable'
