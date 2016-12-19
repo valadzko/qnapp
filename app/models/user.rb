@@ -20,7 +20,7 @@ class User < ApplicationRecord
 
     email = auth.info[:email]
     user = User.where(email: email).first if email
-    if user.nil?
+    unless user
       password = Devise.friendly_token[0, 20]
       if email # if email present - save user in database
         user = User.create!(password:password, email: email, password_confirmation:password)
@@ -36,7 +36,7 @@ class User < ApplicationRecord
 
   def self.build_by_omniauth_params(email, auth)
     user = User.where(email: email).first
-    user = User.create!(email: email, password: auth['user_password'], password_confirmation: auth['user_password']) unless user
+    user ||= User.create!(email: email, password: auth['user_password'], password_confirmation: auth['user_password'])
     user.authorizations.create(provider: auth["provider"], uid: auth["uid"].to_s)
     user
   end

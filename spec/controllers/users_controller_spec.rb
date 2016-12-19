@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe UsersController, type: :controller do
   describe "POST#require_email_for_auth" do
       it 'create authorization for user' do
-        session['omniauth.data'] = {
+        session['devise.omiauth.auth'] = {
           "provider" => 'twitter',
           "uid" => '12345',
           "user_password" => '0123456789'

@@ -82,20 +82,30 @@ RSpec.describe User do
   end
 
   describe '.build_by_omniauth_params' do
-    let!(:auth){ OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', user_password: '12345678') }
-    let(:user){ create(:user, email: 'test@test.com') }
-    it 'create new user' do
-      expect{ User.build_by_omniauth_params('test@test.com', auth) }.to change(User, :count).by(1)
+    let(:auth){ OmniAuth::AuthHash.new(provider: 'twitter', uid: '123456', user_password: '12345678') }
+
+    context "user exists" do
+      let(:user){ create(:user, email: 'test@test.com') }
+      it 'find existing user by email' do
+        expect(User.build_by_omniauth_params(user.email, auth)).to eq user
+      end
+
+      it 'create authorization for user' do
+        user_authorization = User.build_by_omniauth_params(user.email, auth).authorizations.first
+        expect(user_authorization.uid).to eq '123456'
+        expect(user_authorization.provider).to eq 'twitter'
+      end
     end
 
-    it 'find existing user by email' do
-      expect(User.build_by_omniauth_params(user.email, auth)).to eq user
-    end
+    context "user does not exist" do
+      it 'create new user' do
+        expect{ User.build_by_omniauth_params('new-email@test.com', auth) }.to change(User, :count).by(1)
+      end
 
-    it 'create authorization for user' do
-      user_authorization = User.build_by_omniauth_params(user.email, auth).authorizations.first
-      expect(user_authorization.uid).to eq '123456'
-      expect(user_authorization.provider).to eq 'twitter'
+      it 'create authorization for new user' do
+        user_authorization = User.build_by_omniauth_params(user.email, auth).authorizations.first
+        expect(user_authorization).to be_a(Authorization)
+      end
     end
   end
 end
