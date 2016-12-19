@@ -3,7 +3,7 @@ class UsersController < ApplicationController
     auth = session['devise.omiauth.auth']
 
     @user = User.build_by_omniauth_params(users_params['email'], auth)
-    if @user.persisted? && !@user.email.blank?
+    if @user.confirmed_at
       sign_in_and_redirect @user, event: :authentication
       flash[:notice] = "Successfully authenticated from #{auth["provider"].capitalize} account."
     else

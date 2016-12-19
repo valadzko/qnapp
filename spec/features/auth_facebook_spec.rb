@@ -20,9 +20,18 @@ feature 'Auth with Facebook', %q{
     end
 
     scenario "non registered user sign in with facebook" do
+      clear_emails
+      email = "test@email.com"
       visit new_user_registration_path
-      OmniAuth.config.add_mock(:facebook, {info: { email: "test@email.com" }})
+      OmniAuth.config.add_mock(:facebook, {info: { email: email }})
+
       click_on 'Sign in with Facebook'
+
+      open_email(email)
+      current_email.click_link 'Confirm my account'
+      expect(page).to have_content 'Your email address has been successfully confirmed.'
+      click_on 'Sign in with Facebook'
+
       expect(page).to have_content "Successfully authenticated from Facebook account"
       expect(current_path).to eq root_path
     end

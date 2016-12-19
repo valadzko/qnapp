@@ -14,13 +14,17 @@ feature 'User sign up', %q{
   end
 
   scenario 'Unregistered user tries to sign up and succeed' do
+    clear_emails
     fill_in 'user_email', with: 'my-test-email@gmail.com'
     fill_in 'user_password', with: '12345678'
     fill_in 'user_password_confirmation', with: '12345678'
     within '.content' do
       click_on 'Sign up'
     end
-    expect(page).to have_content "You have signed up successfully."
+    open_email("my-test-email@gmail.com")
+    current_email.click_link 'Confirm my account'
+
+    expect(page).to have_content "Your email address has been successfully confirmed."
   end
 
   scenario 'Unregistered user tries to sign up, but passwords are not match' do

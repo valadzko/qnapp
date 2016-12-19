@@ -10,28 +10,36 @@ feature 'Auth with Twitter', %q{
     before(:each) do
       OmniAuth.config.mock_auth[:twitter] = nil
     end
+
     scenario "registered user sign in with twitter" do
       user = create(:user)
-      visit new_user_registration_path
+      visit new_user_session_path
       OmniAuth.config.add_mock(:twitter)
       click_on 'Sign in with Twitter'
 
       expect(page).to have_content 'Provide your email'
-      fill_in 'Email', with: "test@email.com"
+      fill_in 'Email', with: user.email
       click_on 'Continue'
 
       expect(page).to have_content "Successfully authenticated from Twitter account"
       expect(current_path).to eq root_path
     end
 
-    scenario "non registered user sign in with facebook" do
-      visit new_user_registration_path
+    scenario "non registered user sign in with twitter" do
+      clear_emails
+      visit new_user_session_path
       OmniAuth.config.add_mock(:twitter)
       click_on 'Sign in with Twitter'
+      email = "test@email.com"
 
       expect(page).to have_content 'Provide your email'
-      fill_in 'Email', with: "test@email.com"
+      fill_in 'Email', with: email
       click_on 'Continue'
+
+      open_email(email)
+      current_email.click_link 'Confirm my account'
+      expect(page).to have_content 'Your email address has been successfully confirmed.'
+      click_on 'Sign in with Twitter'
 
       expect(page).to have_content "Successfully authenticated from Twitter account"
       expect(current_path).to eq root_path
@@ -39,12 +47,12 @@ feature 'Auth with Twitter', %q{
 
     scenario "Authenticated user sign out" do
       user = create(:user)
-      visit new_user_registration_path
+      visit new_user_session_path
       OmniAuth.config.add_mock(:twitter)
       click_on 'Sign in with Twitter'
 
       expect(page).to have_content 'Provide your email'
-      fill_in 'Email', with: "test@email.com"
+      fill_in 'Email', with: user.email
       click_on 'Continue'
       expect(page).to have_content "Successfully authenticated from Twitter account"
 
