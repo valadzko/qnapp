@@ -1,6 +1,5 @@
 u1 = User.create(email: "p@p.p", password: "123456", password_confirmation: "123456")
 
-
 q0 = Question.create(title: "How do you grow tomatoes?", body: "I am a new as a farmer and would like to get any tips on growing tomatoes", user: u1)
 
 q0.answers.new(body: "Get seeds. Buy heirloom seeds so that you get tomatoes which are not so bred out. Why grow what you can buy in the supermarket, when you can grow unusual tomatoes which look or taste different? Try shopping from 'seeds of change' Another option to get started is to buy tomato starts from a nursery. That is an OK choice for a beginner.

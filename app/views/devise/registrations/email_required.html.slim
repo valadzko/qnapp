@@ -1,0 +1,6 @@
+p Provide your email
+= form_for @user, url: require_email_for_auth_users_path do |f|
+  .form-group
+    = f.label :email
+    = f.text_field :email, class: 'form-control'
+  p = f.submit 'Continue', class: 'btn btn-primary btn-sm'
