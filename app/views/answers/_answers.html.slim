@@ -6,7 +6,7 @@
     h3 id="answers-label" No answers so far
   .add-answer-form  
     - if user_signed_in?
-      p = form_for [@question, @question.answers.create], remote: true do |f|
+      p = form_for [@question, @question.answers.build], remote: true do |f|
         = f.label 'Add your answer'
         .answer-errors
         = f.text_area(:body, cols: 80, rows: 7) 
