@@ -2,11 +2,12 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!, only: [:create, :destroy, :update]
   before_action :find_answer, only: [:destroy, :update, :accept]
   before_action :find_question, only: :create
-  before_action :must_be_author!, only: [:destroy, :update, :accept]
   after_action :publish_answer, only: [:create]
 
   respond_to :js
   respond_to :json, only: :create
+
+  authorize_resource
 
   def create
     respond_with(@answer = @question.answers.create(answer_params.merge(user: current_user)))
@@ -26,12 +27,6 @@ class AnswersController < ApplicationController
   end
 
   private
-
-  def must_be_author!
-    unless current_user.author_of?(@answer)
-      redirect_to @answer.question, error: "You can delete only your answer"
-    end
-  end
 
   def publish_answer
     return if @answer.errors.any?

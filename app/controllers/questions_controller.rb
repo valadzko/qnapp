@@ -2,10 +2,11 @@ class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :find_question, only: [:show, :edit, :update, :destroy]
   before_action :build_answer, only: [:show]
-  before_action :must_be_author!, only: [:destroy]
   after_action :publish_question, only: [:create]
 
   respond_to :json, only: :create
+
+  authorize_resource
 
   def index
     respond_with( @questions = Question.all )
@@ -39,12 +40,6 @@ class QuestionsController < ApplicationController
   end
 
   private
-
-  def must_be_author!
-    unless current_user.author_of?(@question)
-      redirect_to questions_path, error: "You can delete only your question"
-    end
-  end
 
   def publish_question
     return if @question.errors.any?

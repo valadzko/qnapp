@@ -7,6 +7,14 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception unless Rails.env.test?
   before_action :gon_user, unless: :devise_controller?
 
+  rescue_from CanCan::AccessDenied do |exception|
+    respond_to do |format|
+      format.html { redirect_to root_path, alert: exception.message }
+      format.json { head :forbidden }
+      format.js { head :forbidden }
+    end
+  end
+
   private
 
   def gon_user

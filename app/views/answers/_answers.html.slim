@@ -4,8 +4,8 @@
     = render @question.answers
   - else
     h3 id="answers-label" No answers so far
-  .add-answer-form  
-    - if user_signed_in?
+  .add-answer-form
+    - if can?(:create, Answer)
       p = form_for [@question, @question.answers.build], remote: true do |f|
         = f.label 'Add your answer'
         .answer-errors

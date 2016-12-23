@@ -120,7 +120,7 @@ RSpec.describe AnswersController, type: :controller do
 
       it 'render template destroy' do
         delete :destroy, params: { id: @answer, question_id: @question, format: :js }
-        expect(response).to redirect_to question_path(@question)
+        expect(response).to be_forbidden
       end
     end
   end

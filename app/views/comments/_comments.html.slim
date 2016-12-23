@@ -5,7 +5,7 @@
   - else 
     .comments-label No comments
   .add-comment-form
-    - if user_signed_in?
+    - if can?(:create, Comment)
       p = form_for [commentable, commentable.comments.new], remote: true do |f|
         = f.text_field :content, label: 'comment_body'
         .comment-errors

@@ -1,7 +1,10 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :find_vote_object
-  before_action :must_not_be_author!
+
+  respond_to :json
+
+  authorize_resource
 
   def upvote
     @obj.upvote(current_user)
@@ -24,14 +27,6 @@ class VotesController < ApplicationController
     params.each do |name, value|
       if name =~ /(.+)_id$/
         @obj = $1.classify.constantize.find(value)
-      end
-    end
-  end
-
-  def must_not_be_author!
-    if current_user.author_of?(@obj)
-      respond_to do |format|
-        format.json { render json: {id: @obj.id, errors: 'Author can not vote!'}, status: :unprocessable_entity }
       end
     end
   end

@@ -6,6 +6,8 @@ class CommentsController < ApplicationController
 
   respond_to :js
 
+  authorize_resource
+
   def index
     respond_with(@comments = @commentable.comments)
   end
