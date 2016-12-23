@@ -41,12 +41,12 @@ describe "Profile API" do
   describe 'GET #users' do
     context 'unauthorized' do
       it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/me', params: { format: :json }
+        get '/api/v1/profiles/all', params: { format: :json }
         expect(response.status).to eq 401
       end
 
       it 'returns 401 status if there access_token is not valid' do
-        get '/api/v1/profiles/me', params: { format: :json, access_token: '12345' }
+        get '/api/v1/profiles/all', params: { format: :json, access_token: '12345' }
         expect(response.status).to eq 401
       end
     end
@@ -75,7 +75,7 @@ describe "Profile API" do
         it "users do not contain #{attr}" do
           expect(response.body).to_not have_json_path(attr)
         end
-      end      
+      end
     end
   end
 end
