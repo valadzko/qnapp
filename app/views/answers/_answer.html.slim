@@ -4,12 +4,12 @@
       .errors
       .rating
         p Rating: #{answer.rating}
-      - if user_signed_in? && !current_user.author_of?(answer)
+      - if can?(:vote, answer)
         p = link_to 'upvote', upvote_answer_votes_path(answer), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
         p = link_to 'downvote', downvote_answer_votes_path(answer), method: :post, remote: true, class: 'vote-answer-link', data: { type: :json }
         p = link_to 'reset', resetvote_answer_votes_path(answer), method: :delete, remote: true, class: 'vote-answer-link', data: { type: :json }
     .votecell
-      - if user_signed_in? && current_user.author_of?(answer.question)  
+      - if can?(:accept, answer)
         - if answer.accepted?
           = link_to(image_tag('accepted', size: "40x40", class: "accepted-icon"), accept_answer_path(answer), remote: true, class: 'accepted-link')
         - else
@@ -22,9 +22,10 @@
     = render "layouts/user_info", obj: answer
     = render "comments/comments", commentable: answer
     
-    - if user_signed_in? && current_user.author_of?(answer)
+    - if can?(:destroy, answer)
       p = link_to 'delete', answer, class: 'delete-answer-link',
         method: :delete, remote: true, data: { confirm: "This will delete your answer #{answer.id}. Continue?" }
+    - if can?(:update, answer)
       p = link_to 'edit', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       br
       p = form_for answer, remote: true, html: {id: "edit-answer-#{answer.id}"} do |f|

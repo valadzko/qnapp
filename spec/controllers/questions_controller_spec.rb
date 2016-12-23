@@ -60,13 +60,12 @@ RSpec.describe QuestionsController, type: :controller do
         sign_out(@user)
         sign_in(create(:user))
       end
-
       it 'does not delete question' do
         expect{ delete :destroy, params: { id: @question } }.to_not change(Question, :count)
       end
-      it 'should redirect to questions' do
+      it 'should redirect to root_path' do
         delete :destroy, params: { id: @question }
-        expect(response).to redirect_to questions_path
+        expect(response).to redirect_to root_path
       end
     end
   end
@@ -86,10 +85,10 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'with invalid attributes' do
       it 'does not save the question' do
-        expect { post :create, question: attributes_for(:invalid_question) }.to_not change(Question, :count)
+        expect { post :create, params: { question: attributes_for(:invalid_question) } }.to_not change(Question, :count)
       end
       it 're-renders new view' do
-        post :create, question: attributes_for(:invalid_question)
+        post :create, params: { question: attributes_for(:invalid_question) }
         expect(response).to render_template :new
       end
     end

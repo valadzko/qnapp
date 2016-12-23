@@ -14,7 +14,8 @@ module Votable
   end
 
   def reset_vote(user)
-    votes.where(user: user).first.delete
+    to_delete = votes.where(user: user).first
+    to_delete.delete if to_delete
   end
 
   def downvote(user)

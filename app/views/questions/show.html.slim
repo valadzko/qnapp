@@ -5,8 +5,8 @@ hr
 .question-errors
 
 .question-rating
-  p Rating: #{@question.rating}  
-- if user_signed_in? && !current_user.author_of?(@question)
+  p Rating: #{@question.rating}
+- if can?(:vote, @question)
   p = link_to 'upvote', upvote_question_votes_path(@question), method: :post, remote: true, class: 'vote-question-link', data: { type: :json }
   p = link_to 'downvote', downvote_question_votes_path(@question), method: :post, remote: true, class: 'vote-question-link', data: { type: :json }
   p = link_to 'reset', resetvote_question_votes_path(@question), method: :delete, remote: true, class: 'vote-question-link', data: { type: :json }
@@ -15,8 +15,9 @@ hr
   p = @question.body
 = render "attachments/show", obj: @question
 = render "layouts/user_info", obj: @question
-- if user_signed_in? && current_user.author_of?(@question)  
+- if can?(:destroy, @question)
   p = link_to 'delete', @question, class: 'delete-question-link', :method => :delete, :data => {:confirm => 'This will delete your question. Are you sure?'}
+- if can?(:update, @question)
   p = link_to 'edit', '', class: 'edit-question-link'
   .question-errors
   p = form_for @question, remote: true, class:'edit_question' do |f|
