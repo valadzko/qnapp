@@ -1,4 +1,6 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
+  before_action :load_question, only: [:show]
+
   authorize_resource
 
   def index
@@ -7,7 +9,6 @@ class Api::V1::QuestionsController < Api::V1::BaseController
   end
 
   def show
-    @question = Question.find(params[:id])
     respond_with @question
   end
 

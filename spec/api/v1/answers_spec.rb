@@ -1,9 +1,10 @@
 require 'rails_helper'
 
 describe "Answers API" do
+  let!(:question) { create(:question) }
+
   describe 'GET /index' do
     context 'unauthorized' do
-      let!(:question) { create(:question) }
       it 'returns 401 status if there is no access_token' do
         get "/api/v1/questions/#{question.id}/answers", params: { format: :json }
         expect(response.status).to eq 401
@@ -17,7 +18,6 @@ describe "Answers API" do
 
     context 'authorized' do
       let(:access_token){ create(:access_token) }
-      let!(:question){ create(:question) }
       let!(:answers) { create_list(:answer, 2, question: question) }
       let(:answer){ answers.last }
       let!(:comments){ create_list(:comment, 2, commentable: answer) }
@@ -168,7 +168,6 @@ describe "Answers API" do
 
   describe 'POST /create' do
     context 'unauthorized' do
-      let!(:question) { create(:question) }
 
       it 'returns 401 status if there is no access_token' do
         post "/api/v1/questions/#{:question_id}/answers", params: { answer: attributes_for(:answer), format: :json }
@@ -183,7 +182,6 @@ describe "Answers API" do
 
     context 'authorized' do
       let(:access_token) { create(:access_token) }
-      let!(:question) { create(:question) }
       context "question exists" do
         context "with valid attributes" do
           it 'saved new answer in database' do
@@ -219,6 +217,5 @@ describe "Answers API" do
         end
       end
     end
-
   end
 end

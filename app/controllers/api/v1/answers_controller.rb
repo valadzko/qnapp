@@ -2,7 +2,7 @@ class Api::V1::AnswersController < Api::V1::BaseController
   before_action :load_question, only: [:index, :create]
 
   authorize_resource
-  
+
   def index
     @answers = @question.answers
     respond_with @answers
@@ -21,9 +21,5 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   def answer_params
     params.require(:answer).permit(:body)
-  end
-
-  def load_question
-    @question = Question.find(params[:question_id])
   end
 end
