@@ -18,8 +18,4 @@ class Api::V1::BaseController < ApplicationController
   def not_found
     respond_with '{"error":"not_found"}', status: :not_found
   end
-
-  def load_question
-    @question = Question.find(params[:question_id])
-  end
 end

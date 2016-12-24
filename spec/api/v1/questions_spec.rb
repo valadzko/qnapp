@@ -192,11 +192,6 @@ describe "Questions API" do
           expect(response.body).to be_json_eql(new_question_body.to_json).at_path("body")
         end
 
-        it 'return question json with new title' do
-          new_question_title = "This is new question body!"
-          post '/api/v1/questions', params: { question: attributes_for(:question, title: new_question_title), format: :json, access_token: access_token.token }
-          expect(response.body).to be_json_eql(new_question_title.to_json).at_path("title")
-        end
       end
 
       context 'with invalid question params' do
