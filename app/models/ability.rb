@@ -33,6 +33,7 @@ class Ability
     can :vote, [Answer, Question] do |obj|
       !user.author_of?(obj)
     end
+    can [:me, :all], User
   end
 
   def admin_abilities
