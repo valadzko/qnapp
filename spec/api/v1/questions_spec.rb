@@ -16,8 +16,9 @@ describe "Questions API" do
     context 'authorized' do
       let(:access_token){ create(:access_token) }
       let!(:questions){ create_list(:question, 2) }
-      let(:question){ questions.first }
-      let!(:answer){ create(:answer, question: question) }
+      let!(:question){ questions.first }
+      let!(:comments){ create_list(:comment, 2, commentable: question) }
+      let!(:attachments){ create_list(:attachment, 2, attachable: question) }
 
       before { get '/api/v1/questions', params: { format: :json, access_token: access_token.token } }
 
@@ -26,7 +27,7 @@ describe "Questions API" do
       end
 
       it 'returns list of questions' do
-        expect(response.body).to have_json_size(2)
+        expect(response.body).to have_json_size(questions.size)
       end
 
       %w(id created_at updated_at body).each do |attr|
@@ -35,15 +36,39 @@ describe "Questions API" do
         end
       end
 
-      context 'answers' do
-        it 'insluded in question object' do
-          expect(response.body).to have_json_size(1).at_path("0/answers")
+      context "comments in question" do
+        let(:comment){ comments.first }
+
+        it 'included comment list in question' do
+          expect(response.body).to have_json_size(comments.size).at_path("0/comments")
         end
 
-        %w(id created_at updated_at body).each do |attr|
-          it "answer object contains #{attr}" do
-            expect(response.body).to be_json_eql(answer.send(attr.to_sym).to_json).at_path("0/answers/0/#{attr}")
+        %w(id content created_at commentable_type commentable_id).each do |attr|
+          it "question object contains comment #{attr} param" do
+            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path("0/comments/0/#{attr}")
           end
+        end
+
+        it 'comment in question includes user_email param' do
+          expect(response.body).to be_json_eql(comment.user.email.to_json).at_path("0/comments/0/user_email")
+        end
+      end
+
+      context "attachments in question" do
+        let!(:attachment) { attachments.last }
+
+        it 'included attachment list in question' do
+          expect(response.body).to have_json_size(attachments.size).at_path("0/attachments")
+        end
+
+        %w(id created_at).each do |attr|
+          it "question object contains attachment #{attr} param" do
+            expect(response.body).to be_json_eql(attachment.send(attr.to_sym).to_json).at_path("0/attachments/0/#{attr}")
+          end
+        end
+
+        it 'attachment in question includes url param' do
+          expect(response.body).to be_json_eql(attachment.file.url.to_json).at_path("0/attachments/0/url")
         end
       end
     end
