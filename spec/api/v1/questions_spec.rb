@@ -30,7 +30,7 @@ describe "Questions API" do
         expect(response.body).to have_json_size(questions.size)
       end
 
-      %w(id created_at updated_at body).each do |attr|
+      %w(id created_at title updated_at body).each do |attr|
         it "question object contains #{attr}" do
           expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path("0/#{attr}")
         end
