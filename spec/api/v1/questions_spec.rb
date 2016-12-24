@@ -105,7 +105,7 @@ describe "Questions API" do
           expect(response).to be_success
         end
 
-        %w(id created_at updated_at body).each do |attr|
+        %w(id created_at updated_at title body).each do |attr|
           it "question object contains #{attr}" do
             expect(response.body).to be_json_eql(question.send(attr.to_sym).to_json).at_path("#{attr}")
           end
@@ -155,6 +155,65 @@ describe "Questions API" do
         end
       end
 
+    end
+
+  end
+
+  describe 'POST /create' do
+    context 'unauthorized' do
+
+      it 'returns 401 status if there is no access_token' do
+        post "/api/v1/questions", params: { question: attributes_for(:question), format: :json }
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if there access_token is not valid' do
+        post "/api/v1/questions", params: { question: attributes_for(:question), format: :json, access_token: '12345' }
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:access_token){ create(:access_token) }
+      context 'with valid question params' do
+
+        it 'returns status 200' do
+          post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token }
+          expect(response).to be_success
+        end
+
+        it 'saves the question in database' do
+          expect{post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token }}.to change(Question, :count).by(1)
+        end
+
+        it 'return question json with new body' do
+          new_question_body = "This is new question body!"
+          post '/api/v1/questions', params: { question: attributes_for(:question, body: new_question_body), format: :json, access_token: access_token.token }
+          expect(response.body).to be_json_eql(new_question_body.to_json).at_path("body")
+        end
+
+        it 'return question json with new title' do
+          new_question_title = "This is new question body!"
+          post '/api/v1/questions', params: { question: attributes_for(:question, title: new_question_title), format: :json, access_token: access_token.token }
+          expect(response.body).to be_json_eql(new_question_title.to_json).at_path("title")
+        end
+      end
+
+      context 'with invalid question params' do
+        it 'return 422 (unprocessable entity) code' do
+          post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }
+          expect(response.status).to eq 422
+        end
+
+        it 'has errors in response' do
+          post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }
+          expect(response.body).to have_json_path("errors")
+        end
+
+        it 'does not save question to database' do
+          expect{ post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }}.to_not change(Question, :count)
+        end
+      end
     end
 
   end

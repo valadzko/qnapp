@@ -166,4 +166,59 @@ describe "Answers API" do
     end
   end
 
+  describe 'POST /create' do
+    context 'unauthorized' do
+      let!(:question) { create(:question) }
+
+      it 'returns 401 status if there is no access_token' do
+        post "/api/v1/questions/#{:question_id}/answers", params: { answer: attributes_for(:answer), format: :json }
+        expect(response.status).to eq 401
+      end
+
+      it 'returns 401 status if there access_token is not valid' do
+        post "/api/v1/questions/#{:question_id}/answers", params: { answer: attributes_for(:answer), format: :json, access_token: '12345' }
+        expect(response.status).to eq 401
+      end
+    end
+
+    context 'authorized' do
+      let(:access_token) { create(:access_token) }
+      let!(:question) { create(:question) }
+      context "question exists" do
+        context "with valid attributes" do
+          it 'saved new answer in database' do
+            expect{ post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:answer), format: :json, access_token: access_token.token }}.to change(Answer, :count).by(1)
+          end
+
+          it 'return success 200 code' do
+            post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:answer), format: :json, access_token: access_token.token }
+            expect(response).to be_success
+          end
+
+          it 'return answer with new body' do
+            new_answer_body = "this is new answer body!"
+            post "/api/v1/questions/#{question.id}/answers", params: { answer: {body: new_answer_body}, format: :json, access_token: access_token.token }
+            expect(response.body).to be_json_eql(new_answer_body.to_json).at_path("body")
+          end
+        end
+
+        context "with invalid attributes" do
+          it 'return 422 (unprocessable entity) code' do
+            post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token }
+            expect(response.status).to eq 422
+          end
+
+          it 'has errors in response' do
+            post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token }
+            expect(response.body).to have_json_path("errors")
+          end
+
+          it 'does not save invalid answer in database' do
+            expect{ post "/api/v1/questions/#{question.id}/answers", params: { answer: attributes_for(:invalid_answer), format: :json, access_token: access_token.token } }.to_not change(Answer, :count)
+          end
+        end
+      end
+    end
+
+  end
 end

@@ -12,6 +12,6 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def not_found
-    respond_with '{"error": "not_found"}', status: :not_found
+    respond_with '{"error":"not_found"}', status: :not_found
   end
 end
