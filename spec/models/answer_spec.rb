@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  subject { create(:answer) }
   it { should belong_to(:question) }
-  it { should have_many :attachments }
   it { should validate_presence_of :body }
   it { should validate_presence_of :user_id }
-  it { should accept_nested_attributes_for :attachments }
 
   let(:user){ create(:user) }
   let(:question) {create(:question, user: user)}
@@ -26,38 +25,7 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  context 'Validate voting for answer' do
-    before(:each) do
-      @voting_user = create(:user)
-      @rating_before = answer.rating
-    end
+  it_behaves_like "Votable"
+  it_behaves_like "Attachable"
 
-    it 'increase rating of answer by 1' do
-      answer.upvote(@voting_user)
-      expect(answer.rating).to be (@rating_before + 1)
-    end
-
-    it 'does not increase rating for double upvote' do
-      answer.upvote(@voting_user)
-      answer.upvote(@voting_user)
-      expect(answer.rating).to be (@rating_before + 1)
-    end
-
-    it 'decrease rating of answer' do
-      answer.downvote(@voting_user)
-      expect(answer.rating).to be (@rating_before - 1)
-    end
-
-    it 'does not decrease rating for double downvote' do
-      answer.downvote(@voting_user)
-      answer.downvote(@voting_user)
-      expect(answer.rating).to be (@rating_before - 1)
-    end
-
-    it 'cancel vote for answer' do
-      answer.upvote(@voting_user)
-      answer.reset_vote(@voting_user)
-      expect(answer.rating).to be @rating_before
-    end
-  end
 end

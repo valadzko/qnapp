@@ -21,6 +21,11 @@ RSpec.describe AnswersController, type: :controller do
         post :create, xhr: true, params: { answer: attributes_for(:answer), question_id: question, format: :js }
         expect(assigns(:answer).user).to eq subject.current_user
       end
+
+      it 'publish answer after creation' do
+        expect(subject).to receive(:publish_answer)
+        post :create, xhr: true, params: { answer: attributes_for(:answer), question_id: question, format: :js }
+      end
     end
 
     context 'with invalid attributes' do

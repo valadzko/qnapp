@@ -36,7 +36,10 @@ RSpec.describe CommentsController, type: :controller do
       it 'associate new comment with current user' do
         expect(assigns(:comment).user).to eq user
       end
+      it 'publish comment after creation' do
+        expect(subject).to receive(:publish_comment)
+        post :create, params: { question_id: question.id, comment: attributes_for(:comment), format: :js }
+      end
     end
-
   end
 end
