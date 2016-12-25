@@ -1,10 +1,9 @@
 class VotesController < ApplicationController
   before_action :authenticate_user!
   before_action :find_vote_object
+  before_action :authorize_parent
 
   respond_to :json
-
-  authorize_resource
 
   def upvote
     @obj.upvote(current_user)
@@ -22,6 +21,10 @@ class VotesController < ApplicationController
   end
 
   private
+
+  def authorize_parent
+    authorize! :vote, @obj
+  end
 
   def find_vote_object
     params.each do |name, value|

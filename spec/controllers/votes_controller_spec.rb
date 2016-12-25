@@ -29,9 +29,8 @@ RSpec.describe VotesController, type: :controller do
         sign_in(@author)
         post :upvote, xhr: true, params: { answer_id: @answer.id, format: :json }
         @answer.reload
-        expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
-        expect(response.body).to be_json_eql(expected_response_json)
+        expect(response.status).to eq 403
       end
     end
   end
@@ -59,7 +58,7 @@ RSpec.describe VotesController, type: :controller do
         @answer.reload
         expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
-        expect(response.body).to be_json_eql(expected_response_json)
+        expect(response.status).to eq 403
       end
     end
   end
@@ -86,7 +85,7 @@ RSpec.describe VotesController, type: :controller do
         @answer.reload
         expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
-        expect(response.body).to be_json_eql(expected_response_json)
+        expect(response.status).to eq 403
       end
     end
   end
