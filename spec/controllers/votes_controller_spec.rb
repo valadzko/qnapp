@@ -56,7 +56,6 @@ RSpec.describe VotesController, type: :controller do
         sign_in(@author)
         delete :resetvote, xhr: true, params: { answer_id: @answer.id, format: :json }
         @answer.reload
-        expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
         expect(response.status).to eq 403
       end
@@ -83,7 +82,6 @@ RSpec.describe VotesController, type: :controller do
         sign_in(@author)
         post :downvote, xhr: true, params: { answer_id: @answer.id, format: :json }
         @answer.reload
-        expected_response_json = %({"id":"#{@answer.id}","errors":"Author can not vote!"})
         expect(@answer.rating).to eq 0
         expect(response.status).to eq 403
       end

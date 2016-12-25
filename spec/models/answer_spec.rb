@@ -1,11 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Answer, type: :model do
+  subject { create(:answer) }
   it { should belong_to(:question) }
-  it { should have_many :attachments }
   it { should validate_presence_of :body }
   it { should validate_presence_of :user_id }
-  it { should accept_nested_attributes_for :attachments }
 
   let(:user){ create(:user) }
   let(:question) {create(:question, user: user)}
@@ -26,6 +25,7 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  it_behaves_like "Commentable"
+  it_behaves_like "Votable"
+  it_behaves_like "Attachable"
 
 end
