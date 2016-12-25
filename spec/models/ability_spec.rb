@@ -60,5 +60,10 @@ RSpec.describe Ability, type: :model do
        it { should be_able_to :downvote, other_answer, user: user}
        it { should be_able_to :resetvote, other_answer, user: user}
      end
+
+     context 'profile' do
+       it { should be_able_to :me, User }
+       it { should be_able_to :all, User }
+     end
    end
 end
