@@ -2,17 +2,9 @@ require 'rails_helper'
 
 describe "Questions API" do
   describe 'GET /index' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/questions', params: { format: :json }
-        expect(response.status).to eq 401
-      end
 
-      it 'returns 401 status if there access_token is not valid' do
-        get '/api/v1/questions', params: { format: :json, access_token: '12345' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
+
     context 'authorized' do
       let(:access_token){ create(:access_token) }
       let!(:questions){ create_list(:question, 2) }
@@ -22,9 +14,7 @@ describe "Questions API" do
 
       before { get '/api/v1/questions', params: { format: :json, access_token: access_token.token } }
 
-      it 'returns status 200' do
-        expect(response).to be_success
-      end
+      it_behaves_like "API Response Success"
 
       it 'returns list of questions' do
         expect(response.body).to have_json_size(questions.size)
@@ -36,59 +26,21 @@ describe "Questions API" do
         end
       end
 
-      context "comments in question" do
-        let(:comment){ comments.first }
+      let(:comments_path) { "0/comments" }
+      it_behaves_like "API Response Object Has Comments"
 
-        it 'included comment list in question' do
-          expect(response.body).to have_json_size(comments.size).at_path("0/comments")
-        end
+      let(:attachments_path) { "0/attachments" }
+      it_behaves_like "API Response Object Has Attachments"
 
-        %w(id content created_at commentable_type commentable_id).each do |attr|
-          it "comment object in question contains #{attr} param" do
-            expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path("0/comments/0/#{attr}")
-          end
-        end
-
-        it 'comment in question includes user_email param' do
-          expect(response.body).to be_json_eql(comment.user.email.to_json).at_path("0/comments/0/user_email")
-        end
-      end
-
-      context "attachments in question" do
-        let!(:attachment) { attachments.last }
-
-        it 'included attachment list in question' do
-          expect(response.body).to have_json_size(attachments.size).at_path("0/attachments")
-        end
-
-        %w(id created_at).each do |attr|
-          it "attachment object in question contains #{attr} param" do
-            expect(response.body).to be_json_eql(attachment.send(attr.to_sym).to_json).at_path("0/attachments/0/#{attr}")
-          end
-        end
-
-        it 'attachment in question includes url param' do
-          expect(response.body).to be_json_eql(attachment.file.url.to_json).at_path("0/attachments/0/url")
-        end
-      end
+    end
+    def do_request(options = {})
+      get '/api/v1/questions', params: { format: :json }.merge(options)
     end
   end
 
   describe 'GET /show' do
 
-    context 'unauthorized' do
-      let!(:question){ create(:question) }
-
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}", params: { format: :json }
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if there access_token is not valid' do
-        get "/api/v1/questions/#{question.id}", params: { format: :json, access_token: '12345' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:access_token){ create(:access_token) }
@@ -101,9 +53,7 @@ describe "Questions API" do
 
         before { get "/api/v1/questions/#{question.id}", params: { format: :json, access_token: access_token.token } }
 
-        it 'returns status 200' do
-          expect(response).to be_success
-        end
+        it_behaves_like "API Response Success"
 
         %w(id created_at updated_at title body).each do |attr|
           it "question object contains #{attr}" do
@@ -111,76 +61,38 @@ describe "Questions API" do
           end
         end
 
-        context "comments in question" do
-          let(:comment){ comments.first }
+        let(:comments_path) { "comments" }
+        it_behaves_like "API Response Object Has Comments"
 
-          it 'included comment list in question' do
-            expect(response.body).to have_json_size(comments.size).at_path("comments")
-          end
-
-          %w(id content created_at commentable_type commentable_id).each do |attr|
-            it "comment object in question contains #{attr} param" do
-              expect(response.body).to be_json_eql(comment.send(attr.to_sym).to_json).at_path("comments/0/#{attr}")
-            end
-          end
-
-          it 'comment in question includes user_email param' do
-            expect(response.body).to be_json_eql(comment.user.email.to_json).at_path("comments/0/user_email")
-          end
-        end
-
-        context "attachments in question" do
-          let(:attachment) { attachments.last }
-
-          it 'included attachment list in question' do
-            expect(response.body).to have_json_size(attachments.size).at_path("attachments")
-          end
-
-          %w(id created_at).each do |attr|
-            it "attachment object in question contains #{attr} param" do
-              expect(response.body).to be_json_eql(attachment.send(attr.to_sym).to_json).at_path("attachments/0/#{attr}")
-            end
-          end
-
-          it 'attachment in question includes url param' do
-            expect(response.body).to be_json_eql(attachment.file.url.to_json).at_path("attachments/0/url")
-          end
-        end
-
+        let!(:attachments_path){"attachments"}
+        it_behaves_like "API Response Object Has Attachments"
       end
+
       context 'question does not exist' do
         it 'return 404 status' do
           get "/api/v1/questions/123", params: { format: :json, access_token: access_token.token }
           expect(response).to be_not_found
         end
       end
-
     end
 
+    def do_request(options = {})
+      question = create(:question)
+      get "/api/v1/questions/#{question.id}", params: { format: :json }.merge(options)
+    end
   end
 
   describe 'POST /create' do
-    context 'unauthorized' do
 
-      it 'returns 401 status if there is no access_token' do
-        post "/api/v1/questions", params: { question: attributes_for(:question), format: :json }
-        expect(response.status).to eq 401
-      end
-
-      it 'returns 401 status if there access_token is not valid' do
-        post "/api/v1/questions", params: { question: attributes_for(:question), format: :json, access_token: '12345' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:access_token){ create(:access_token) }
       context 'with valid question params' do
 
-        it 'returns status 200' do
-          post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token }
-          expect(response).to be_success
-        end
+        before { post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token } }
+
+        it_behaves_like "API Response Success"
 
         it 'saves the question in database' do
           expect{post '/api/v1/questions', params: { question: attributes_for(:question), format: :json, access_token: access_token.token }}.to change(Question, :count).by(1)
@@ -191,19 +103,13 @@ describe "Questions API" do
           post '/api/v1/questions', params: { question: attributes_for(:question, body: new_question_body), format: :json, access_token: access_token.token }
           expect(response.body).to be_json_eql(new_question_body.to_json).at_path("body")
         end
-
       end
 
       context 'with invalid question params' do
-        it 'return 422 (unprocessable entity) code' do
-          post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }
-          expect(response.status).to eq 422
-        end
 
-        it 'has errors in response' do
-          post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }
-          expect(response.body).to have_json_path("errors")
-        end
+        before { post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token } }
+
+        it_behaves_like "API Failed To Create Object"
 
         it 'does not save question to database' do
           expect{ post '/api/v1/questions', params: { question: attributes_for(:invalid_question), format: :json, access_token: access_token.token }}.to_not change(Question, :count)
@@ -211,5 +117,8 @@ describe "Questions API" do
       end
     end
 
+    def do_request(options = {})
+      post "/api/v1/questions", params: { question: attributes_for(:question), format: :json }.merge(options)
+    end
   end
 end

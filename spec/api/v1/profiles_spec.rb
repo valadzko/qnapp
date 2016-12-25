@@ -2,17 +2,8 @@ require 'rails_helper'
 
 describe "Profile API" do
   describe "GET /me" do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/me', params: { format: :json }
-        expect(response.status).to eq 401
-      end
 
-      it 'returns 401 status if there access_token is not valid' do
-        get '/api/v1/profiles/me', params: { format: :json, access_token: '12345' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:me){ create(:user) }
@@ -20,9 +11,7 @@ describe "Profile API" do
 
       before { get '/api/v1/profiles/me', params: { format: :json, access_token: access_token.token } }
 
-      it 'returns status 200' do
-        expect(response).to be_success
-      end
+      it_behaves_like "API Response Success"
 
       %w(id email created_at updated_at admin).each do |attr|
         it "contains #{attr}" do
@@ -36,20 +25,14 @@ describe "Profile API" do
         end
       end
     end
+    def do_request(options = {})
+      get '/api/v1/profiles/me', params: { format: :json }.merge(options)
+    end
   end
 
   describe 'GET #users' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/profiles/all', params: { format: :json }
-        expect(response.status).to eq 401
-      end
 
-      it 'returns 401 status if there access_token is not valid' do
-        get '/api/v1/profiles/all', params: { format: :json, access_token: '12345' }
-        expect(response.status).to eq 401
-      end
-    end
+    it_behaves_like "API Authenticable"
 
     context 'authorized' do
       let(:me){ create(:user) }
@@ -58,11 +41,10 @@ describe "Profile API" do
 
       before { get '/api/v1/profiles/all', params: { format: :json, access_token: access_token.token } }
 
-      it 'returns status 200' do
-        expect(response).to be_success
-      end
+      it_behaves_like "API Response Success"
+
       it 'returns right number of existing users' do
-        expect(JSON.parse(response.body).count).to eq 3
+        expect(response.body).to have_json_size(users_list.size)
       end
       it 'does not return current_user' do
         expect(response.body).to_not include_json(me.to_json)
@@ -76,6 +58,9 @@ describe "Profile API" do
           expect(response.body).to_not have_json_path(attr)
         end
       end
+    end
+    def do_request(options = {})
+      get '/api/v1/profiles/all', params: { format: :json }.merge(options)
     end
   end
 end
