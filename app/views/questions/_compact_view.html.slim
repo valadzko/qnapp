@@ -1,9 +1,17 @@
-.question-compact-view
-  .minicounts
-    /TODO move to css file
-    p.rating-count style="float: left;border-bottom: 2px solid red;width: 60px;padding: 10px;display: inline-block;text-align: center;box-sizing: border-box;" = q.rating
-    p.answers-count style="float: left;border-bottom: 2px solid green;width: 60px;padding: 10px;text-align: center; box-sizing: border-box;" = q.answers.count
-  .question-link style="float: left;width: auto;padding: 10px;box-sizing: border-box;font-size: 120%;" = link_to q.title, q
-br
-br
-hr
+.demo-card-event.mdl-card.mdl-shadow--2dp
+  .mdl-card__title
+    .card_counter.rating id="#{q.id}-rating" = q.rating
+    .mdl-tooltip data-mdl-for="#{q.id}-rating"
+      | Rating
+    .card_counter.answers id="#{q.id}-answers" = q.answers.count
+    .mdl-tooltip data-mdl-for="#{q.id}-answers"
+      | Answers
+    h4 
+      = link_to q.title, q
+  .mdl-card__actions.mdl-card--border
+    .mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+      i.material-icons keyboard_arrow_up
+    .mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+      i.material-icons keyboard_arrow_down
+    a.mdl-button.mdl-button--colored.mdl-js-button.mdl-js-ripple-effect
+      | Answer

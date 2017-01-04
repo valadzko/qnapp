@@ -23,5 +23,6 @@ html lang="en"
     .mdl-layout.mdl-js-layout
       = render 'layouts/header'
       main.mdl-layout__content
-        = bootstrap_flash
-        = yield
+        .centered-container
+          = bootstrap_flash
+          = yield

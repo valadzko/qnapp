@@ -1,3 +1,54 @@
 // Place all the styles related to the comments controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+.demo-card-event.mdl-card {
+  width: auto;
+  min-height:100%;
+  margin-left: 5px;
+  margin-right: 5px;
+  margin-top: 3px;
+}
+.demo-card-event > .mdl-card__actions {
+  border-color: rgba(255, 255, 255, 0.6);
+}
+.demo-card-event > .mdl-card__title {
+  align-items: center;
+  padding-top: 3px;
+  padding-bottom: 3px;
+}
+.demo-card-event > .mdl-card__title > h4 {
+  padding-left: 10px;
+}
+.demo-card-event > .mdl-card__title > .card_counter {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-size: 30px;
+}
+.demo-card-event > .mdl-card__actions {
+  display: flex;
+  box-sizing:border-box;
+  align-items: center;
+  padding-top: 1px;
+  padding-bottom: 1px;
+}
+.demo-card-event > .mdl-card__actions > .material-icons {
+  padding-right: 10px;
+}
+.demo-card-event > .mdl-card__title,
+.demo-card-event > .mdl-card__actions,
+.demo-card-event > .mdl-card__actions > .mdl-button {
+}
+
+.rating{
+  color: rgb(139, 195, 74);
+  border-bottom: 2px solid rgb(139, 195, 74);
+  margin-left: 7px;
+  margin-right: 7px;
+}
+
+.answers{
+  color: rgb(139, 195, 74);
+  border-bottom: 2px solid rgb(139, 195, 74);
+  margin-left: 7px;
+  margin-right: 7px;
+}
