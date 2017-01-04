@@ -5,6 +5,56 @@
   display: none;
 }
 
+.qnapp-navigation {
+  direction: ltr;
+  -webkit-justify-content: flex-end;
+  -ms-flex-pack: end;
+  justify-content: flex-end;
+  width: 800px;
+}
+
+.mdl-layout__header-row{
+  align-self: center;
+}
+
+@font-face {
+    font-family: 'rechargebold';
+    font-weight: normal;
+    font-style: normal;
+    src: font-url('recharge.bold-webfont.eot');
+    src: font-url('recharge.bold-webfont.eot?#iefix') format('embedded-opentype'),
+         font-url('recharge.bold-webfont.woff') format('woff'),
+         font-url('recharge.bold-webfont.ttf') format('truetype'),
+         font-url('recharge.bold-webfont.svg') format('svg');
+}
+
+.logo{
+  font-family: 'rechargebold';
+  font-size: 36px;
+  color: white;
+}
+
+.logo:hover{
+  text-decoration: none;
+  color: yellow;
+}
+
+.mdl-navigation__link{
+   color: white;
+   display: inline-block;
+   height: 60px;
+   line-height: 68px;
+   border-bottom: 4px solid transparent;
+   font-weight: 700;
+   font-size: 14px;
+ }
+
+.mdl-navigation__link:hover {
+  border-bottom: 4px solid yellow;
+  text-decoration: none;
+  color: yellow;
+}
+
 .centered-container{
   margin: 0 auto;
   max-width: 900px;

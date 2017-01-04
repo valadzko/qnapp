@@ -1,18 +1,13 @@
-.header
-  .navbar.navbar-default.navbar-static-top
-      .container
-        button.navbar-toggle type="button" data-toggle="collapse" data-target=".navbar-responsive-collapse"
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.navbar-brand href=questions_path Qnapp
-        .navbar-collapse.collapse.navbar-responsive-collapse
-          ul.nav.navbar-nav.navbar-left
-            li = nav_link "Questions", questions_path
-            - if can?(:create, Question)
-              li = nav_link "Ask question", new_question_path
-            - if user_signed_in?
-              li = link_to "Sign out", destroy_user_session_path(@user), method: :delete
-            - else
-              li = nav_link "Sign up", new_user_registration_path
-              li = nav_link "Sign in", new_user_session_path    
+header.mdl-layout__header
+  .mdl-layout-icon
+  .mdl-layout__header-row
+    span.mdl-layout__title 
+      = link_to "QNAPP", questions_path, class: "logo"
+    .mdl-layout-spacer
+    .qnapp-navigation.mdl-navigation
+      = link_to "ASK QUESTION", new_question_path, class: "mdl-navigation__link"
+      - if user_signed_in?
+        = link_to "SIGN OUT", destroy_user_session_path(@user), method: :delete, class: "mdl-navigation__link"
+      - else
+        = link_to "SIGN UP", new_user_registration_path, class: "mdl-navigation__link"
+        = link_to "SIGN IN", new_user_session_path, class: "mdl-navigation__link"

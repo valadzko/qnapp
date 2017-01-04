@@ -11,7 +11,6 @@
         .answer-errors
         = f.text_area(:body, cols: 80, rows: 7) 
         = render 'attachments/edit', f: f
-        p
-        = f.submit "Post Your Answer"
+        = f.submit "Post Your Answer", class: "button mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent"
     - else
       h4 You need to login to answer the question
